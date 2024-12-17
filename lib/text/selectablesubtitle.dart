@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'selectabletext.dart';
 import 'package:mecab_dart/mecab_dart.dart';
-
 //god bless japanese devs making all the characters fit in an equal amount of space :sob:
 
 class SelectableSubtitle extends StatefulWidget {
@@ -22,7 +21,7 @@ class SelectableSubtitle extends StatefulWidget {
 class _SelectableSubtitleState extends State<SelectableSubtitle> {
   String _platformVersion = 'Unknown';
   String outputtext = '';
-  var tagger = new Mecab();
+  var tagger = Mecab();
   List<TokenNode> tokens = [];
 
   String removeSpaces(String textInput) {
@@ -74,7 +73,6 @@ class _SelectableSubtitleState extends State<SelectableSubtitle> {
 
     setState(() {
       _platformVersion = platformVersion;
-      ;
       print(platformVersion);
 
       for (var token in tagger.parse(widget.text)) {
@@ -89,7 +87,7 @@ class _SelectableSubtitleState extends State<SelectableSubtitle> {
     return MediaQuery.removePadding(
       context: context,
       removeTop: true,
-      child: Container(
+      child: SizedBox(
         height: 300,
         child: GridView.builder(
             itemCount: pureText.length,

@@ -17,7 +17,7 @@ class SelectableTextTile extends StatelessWidget {
         onTap: () => onTapFunction(expectedValue),
         child: StrokeText(
           text: tileText,
-          textStyle: TextStyle(fontSize: 20, color: Colors.white),
+          textStyle: const TextStyle(fontSize: 20, color: Colors.white),
           strokeColor: Colors.black,
           strokeWidth: 5,
         ));
