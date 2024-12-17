@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'structuredcontent.dart';
 
 class Dictionarytile extends StatefulWidget {
   final List dictionary;
@@ -25,19 +26,11 @@ class _DictionarytileState extends State<Dictionarytile> {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: [
-        Column(
-          children: [Text(hiragana), Text(word)],
-        ),
-        Expanded(
-          child: ListView.builder(
-              itemCount: definitions.length,
-              itemBuilder: (context, index) {
-                return Text(definitions[index].toString());
-              }),
-        )
-      ],
-    );
+    return Column(children: [
+      Column(
+        children: [Text(hiragana), Text(word)],
+      ),
+      Structuredcontent(structure: definitions)
+    ]);
   }
 }

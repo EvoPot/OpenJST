@@ -15,11 +15,10 @@ class HomePage extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       home: Scaffold(
           body: ListView.builder(
+        shrinkWrap: true,
         itemCount: Dictionary.length,
         itemBuilder: (context, index) {
-          return Container(
-              height: 300,
-              child: Dictionarytile(dictionary: Dictionary, item: index));
+          return Dictionarytile(dictionary: Dictionary, item: index);
         },
       )),
     );

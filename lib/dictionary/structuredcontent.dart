@@ -4,7 +4,7 @@ import 'package:flutter_widget_from_html/flutter_widget_from_html.dart';
 //im actually about to lose it
 
 class Structuredcontent extends StatefulWidget {
-  final Map structure;
+  final dynamic structure;
   const Structuredcontent({super.key, required this.structure});
 
   @override
@@ -14,29 +14,24 @@ class Structuredcontent extends StatefulWidget {
 class _StructuredcontentState extends State<Structuredcontent> {
   @override
   Widget build(BuildContext context) {
-    dynamic content = widget.structure["content"];
-
     //cant read the code? me too!
 
-    if (content.runtimeType == String) {
-      return Text(content);
-    } else if (content.runtimeType == List) {
+    if (widget.structure is String) {
+      return Text(widget.structure);
+    } else if (widget.structure is List) {
       return ListView.builder(
-          itemCount: content.length,
+          shrinkWrap: true,
+          itemCount: widget.structure.length,
           itemBuilder: (context, index) {
-            return Structuredcontent(structure: content[index]);
+            return Structuredcontent(structure: widget.structure[index]);
           });
-    } else if (content.runtimeType == Map) {
-      String tag = content["tag"];
-
-      if (tag == "img") {
-        return HtmlWidget("""
-
-<img src="${content["path"]}" width="${content["width"]}" height="${content["height"]}" style="${content["pixelated"] ? "image-rendering: pixelated;" : ""}">
-
-""");
+    } else if (widget.structure is Map) {
+      if (widget.structure["type"] == "structured-content") {
+        return Structuredcontent(
+            structure: widget.structure[
+                "content"]); //if the inputted map has a 'type', it is likely a 'structured-content'
       }
     }
-    return Text('h');
+    return Text(widget.structure.toString());
   }
 }
