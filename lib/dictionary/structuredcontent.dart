@@ -32,10 +32,11 @@ class _StructuredcontentState extends State<Structuredcontent> {
       if (tag == "img") {
         return HtmlWidget("""
 
-<img src="" width="35" height="35" style="image-rendering: pixelated;">
+<img src="${content["path"]}" width="${content["width"]}" height="${content["height"]}" style="${content["pixelated"] ? "image-rendering: pixelated;" : ""}">
 
 """);
       }
     }
+    return Text('h');
   }
 }
