@@ -13,7 +13,15 @@ class HomePage extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      home: Scaffold(body: Dictionarytile(dictionary: Dictionary, item: 0)),
+      home: Scaffold(
+          body: ListView.builder(
+        itemCount: Dictionary.length,
+        itemBuilder: (context, index) {
+          return Container(
+              height: 300,
+              child: Dictionarytile(dictionary: Dictionary, item: index));
+        },
+      )),
     );
   }
 }

@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:ruby_text/ruby_text.dart';
 
 class Dictionarytile extends StatefulWidget {
   final List dictionary;
@@ -14,12 +13,14 @@ class Dictionarytile extends StatefulWidget {
 class _DictionarytileState extends State<Dictionarytile> {
   late String word;
   late String hiragana;
+  late List definitions;
 
   @override
   void initState() {
     super.initState();
     word = widget.dictionary[widget.item][0];
     hiragana = widget.dictionary[widget.item][1];
+    definitions = widget.dictionary[widget.item][5];
   }
 
   @override
@@ -28,6 +29,13 @@ class _DictionarytileState extends State<Dictionarytile> {
       children: [
         Column(
           children: [Text(hiragana), Text(word)],
+        ),
+        Expanded(
+          child: ListView.builder(
+              itemCount: definitions.length,
+              itemBuilder: (context, index) {
+                return Text(definitions[index].toString());
+              }),
         )
       ],
     );
