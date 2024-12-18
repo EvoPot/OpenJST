@@ -1,5 +1,3 @@
-import 'dart:io';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_widget_from_html/flutter_widget_from_html.dart';
 
@@ -41,7 +39,9 @@ class _StructuredcontentState extends State<Structuredcontent> {
                 .structure["text"]); //why did this need its seperate thing lol
 
           case ("image"):
-            return Image.asset("assets/images/cat.png");
+            return HtmlWidget(
+              """<img src="asset:assets/images/favicon.png">""",
+            );
         }
       }
     }
