@@ -41,7 +41,7 @@ class _StructuredcontentState extends State<Structuredcontent> {
                 .structure["text"]); //why did this need its seperate thing lol
 
           case ("image"):
-            return Image(image: AssetImage("assets/images/cat.png"));
+            return Image.asset("assets/images/cat.png");
         }
       }
     }
