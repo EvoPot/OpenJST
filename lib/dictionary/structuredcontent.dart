@@ -4,6 +4,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter_widget_from_html/flutter_widget_from_html.dart';
 
 //im actually about to lose it
+//if its functional, it doesnt need a fix! \(^v^)/
+
+/*
+
+This widget is supposed to get the "content" of the "structured-content" elements in the dictionary.
+Because the content is mostly HTML represented in variables the code here is mostly for HTML conversion.
+
+*/
 
 class Structuredcontent extends StatefulWidget {
   final dynamic structure;
@@ -16,10 +24,19 @@ class Structuredcontent extends StatefulWidget {
 class _StructuredcontentState extends State<Structuredcontent> {
   //i have no idea how this code even works anymore but im going with it
   String varToHtml(dynamic input) {
-    String output = "";
-    String additions = "";
+    //The function for processing variables to HTML.
 
     if (input is Map) {
+      //Processing for maps. waow
+      //The following are the values from the json dictionaries:
+
+      String tag = input["tag"] ?? "";
+      String description = input["description"] ?? "";
+      String width = input["width"].toString();
+      String height = input["height"].toString();
+      String sizeUnits = input["sizeUnits"] ?? "";
+      String imageRendering = input["imageRendering"] ?? "";
+
       String styles =
           """font-style: ${input["style"]?["fontStyle"] ?? "normal"};
 
@@ -31,50 +48,56 @@ class _StructuredcontentState extends State<Structuredcontent> {
 
                     vertical-align: ${input["style"]?["verticalAlign"] ?? "baseline"};
 
-                    text-align: ${input["style"]?["textAlign"] ?? "left"};""";
+                    text-align: ${input["style"]?["textAlign"]?.toString() ?? "left"};"""; //Initialize CSS styles.
+
+      String innerValue = varToHtml(input["content"]).replaceAll(
+          "\n", "<br>"); // The inner value. <example>(its this one)</example>
 
       if (["ruby", "rp", "rt"].contains(input["tag"])) {
-        return """<${input["tag"]}>${varToHtml(input["content"]).replaceAll("\n", "<br>")}</${input["tag"]}>"""; // this code is sponsored by black magic
+        return """<$tag>$innerValue</$tag>"""; // Output a styleless html element for rubies (the hiragana stuff) - Is likely temporary!
       }
 
       if (input["tag"] == "img" || input["type"] == "image") {
         return """<${input["tag"] ?? "img"} src="asset:assets/images/favicon.png" 
-                alt=${input["description"]}
-                width = ${input["width"]?.toString() ?? ""}${input["sizeUnits"] is String ? input["sizeUnits"] : ""}
-                height = ${input["height"]?.toString() ?? ""}${input["sizeUnits"] is String ? input["sizeUnits"] : ""}
-                ${input["pixelated"] == true ? "image-rendering:pixelated" : ""}>""";
+                alt=$description
+                width = $width$sizeUnits
+                height = $height$sizeUnits
+                image-rendering:$imageRendering
+                ${input["pixelated"] == true ? "image-rendering:pixelated" : ""}>"""; //The dictionary format has "pixelated" and "imageRendering" attributes seperately, this is for fallback
       } else {
-        String colSpanAttr =
-            input["colSpan"] != null ? 'colspan="${input["colSpan"]}"' : '';
-        String rowSpanAttr =
-            input["rowSpan"] != null ? 'rowspan="${input["rowSpan"]}"' : '';
+        String colSpanAttr = input["colSpan"] != null
+            ? 'colspan="${input["colSpan"]}"'
+            : ''; //For the tables
+        String rowSpanAttr = input["rowSpan"] != null
+            ? 'rowspan="${input["rowSpan"]}"'
+            : ''; //Also for the tables
 
         return ("""
-            <${input["tag"]}
-            style="$styles"
-            $colSpanAttr $rowSpanAttr>
-              ${varToHtml(input["content"]).replaceAll("\n", "<br>")}</${input["tag"]}>
+            <$tag
+                style="$styles"
+                  $colSpanAttr $rowSpanAttr>
+                    $innerValue</$tag>
 
-          """
+                """
             .replaceAll(RegExp(r'\s+'), ' ')
-            .trim());
-
-        // This is NOT readable
+            .trim()); //Return the final result
       }
     } else if (input is List) {
-      for (var i in input) {
+      String output = "";
+
+      for (dynamic i in input) {
         output += varToHtml(i);
-      }
+      } //Process every element of a List
+
       return output;
     } else {
-      return input.toString();
+      return input
+          .toString(); //If the input is not a map or a list, just return the input as a string.
     }
   }
 
   @override
   Widget build(BuildContext context) {
-    //cant read the code? me too!
-
     if (widget.structure is String) {
       return HtmlWidget(widget
           .structure); //return the text itself if what we have is raw text
@@ -90,13 +113,14 @@ class _StructuredcontentState extends State<Structuredcontent> {
       if (widget.structure["type"] == "structured-content") {
         return Structuredcontent(
             structure: widget.structure[
-                "content"]); //if the inputted map has a 'type', it is likely a 'structured-content'
+                "content"]); //Maps that have a "type" are likely structured contents.
       } else if (widget.structure["type"] == "text") {
-        return HtmlWidget(varToHtml(widget.structure["content"]));
+        return HtmlWidget(varToHtml(
+            widget.structure["content"])); //Return the content for the text
       } else {
-        return HtmlWidget(varToHtml(widget.structure));
+        return HtmlWidget(varToHtml(widget.structure)); //Fallback
       }
     }
-    return Text(widget.structure.toString());
+    return Text(widget.structure.toString()); //Fallback
   }
 }
