@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_widget_from_html/flutter_widget_from_html.dart';
 
@@ -14,8 +16,14 @@ class Structuredcontent extends StatefulWidget {
 class _StructuredcontentState extends State<Structuredcontent> {
   String varToHtml(dynamic input) {
     String output = "";
+    String additions = "";
     if (input is Map) {
-      return """<${input["tag"]}>${varToHtml(input["content"])}</${input["tag"]}>""";
+      return ("""<${input["tag"]} 
+                 style="text-decoration-line: ${input["style"] != null && input["style"]["textDecorationLine"] is List ? (input["style"]["textDecorationLine"] ?? []).join(" ") : (input["style"]?["textDecorationLine"] ?? "none")};
+                 font-size: ${input["style"]?["fontSize"] ?? "none"};
+                 font-weight: ${input["style"]?["fontWeight"] ?? "normal"};">
+            ${varToHtml(input["content"])}
+          </${input["tag"]}>"""); // This is NOT readable
     } else if (input is List) {
       for (var i in input) {
         output += varToHtml(i);
@@ -24,6 +32,7 @@ class _StructuredcontentState extends State<Structuredcontent> {
     } else {
       return input.toString();
     }
+    return "null";
   }
 
   @override
@@ -69,9 +78,13 @@ class _StructuredcontentState extends State<Structuredcontent> {
                 height = ${widget.structure["height"].toString()}${widget.structure["sizeUnits"] is String ? widget.structure["sizeUnits"] : ""}
                 ${widget.structure["pixelated"] == true ? "image-rendering:pixelated" : ""}>""");
           case ("ul"):
-            return HtmlWidget(varToHtml(widget.structure));
           case ("ol"):
-            return HtmlWidget(varToHtml(widget.structure));
+          case ("table"):
+          case ("div"):
+          case ("ruby"):
+          case ("a"):
+            return HtmlWidget(varToHtml(widget
+                .structure)); // theres probably a better way to write this but im way too stupid for that
         }
       }
     }
