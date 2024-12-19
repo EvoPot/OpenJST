@@ -12,6 +12,20 @@ class Structuredcontent extends StatefulWidget {
 }
 
 class _StructuredcontentState extends State<Structuredcontent> {
+  String varToHtml(dynamic input) {
+    String output = "";
+    if (input is Map) {
+      return """<${input["tag"]}>${varToHtml(input["content"])}</${input["tag"]}>""";
+    } else if (input is List) {
+      for (var i in input) {
+        output += varToHtml(i);
+      }
+      return output;
+    } else {
+      return input.toString();
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     //cant read the code? me too!
@@ -39,11 +53,25 @@ class _StructuredcontentState extends State<Structuredcontent> {
                 .structure["text"]); //why did this need its seperate thing lol
 
           case ("image"):
-            return HtmlWidget("""<img src="asset:assets/images/favicon.png"
+          case ("img"):
+            //favicon is a placeholder, work on a system to make users add their own files from dictionaries
+            return HtmlWidget("""<img src="asset:assets/images/favicon.png" 
                 alt=${widget.structure["description"]}
                 width = ${widget.structure["width"]}
                 height = ${widget.structure["height"]}
                 ${widget.structure["pixelated"] ? "image-rendering:pixelated" : ""}>""");
+        }
+        switch (widget.structure["tag"]) {
+          case ("img"):
+            return HtmlWidget("""<img src="asset:assets/images/favicon.png" 
+                alt=${widget.structure["description"]}
+                width = ${widget.structure["width"].toString()}${widget.structure["sizeUnits"] is String ? widget.structure["sizeUnits"] : ""}
+                height = ${widget.structure["height"].toString()}${widget.structure["sizeUnits"] is String ? widget.structure["sizeUnits"] : ""}
+                ${widget.structure["pixelated"] == true ? "image-rendering:pixelated" : ""}>""");
+          case ("ul"):
+            return HtmlWidget(varToHtml(widget.structure));
+          case ("ol"):
+            return HtmlWidget(varToHtml(widget.structure));
         }
       }
     }
