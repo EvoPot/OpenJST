@@ -39,9 +39,11 @@ class _StructuredcontentState extends State<Structuredcontent> {
                 .structure["text"]); //why did this need its seperate thing lol
 
           case ("image"):
-            return HtmlWidget(
-              """<img src="asset:assets/images/favicon.png">""",
-            );
+            return HtmlWidget("""<img src="asset:assets/images/favicon.png"
+                alt=${widget.structure["description"]}
+                width = ${widget.structure["width"]}
+                height = ${widget.structure["height"]}
+                ${widget.structure["pixelated"] ? "image-rendering:pixelated" : ""}>""");
         }
       }
     }
