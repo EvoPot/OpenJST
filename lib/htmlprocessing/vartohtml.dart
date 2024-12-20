@@ -24,6 +24,10 @@ String varToHtml(dynamic input) {
       return """<$tag>$innerValue</$tag>"""; // Output a styleless html element for rubies (the hiragana stuff) - Is likely temporary!
     }
 
+    if (input["tag"] == "a") {
+      return "<a href=${input["href"]}>";
+    }
+
     if (input["tag"] == "img" || input["type"] == "image") {
       return """<${input["tag"] ?? "img"} src="asset:assets/images/favicon.png" 
                 alt=$description
