@@ -14,3 +14,12 @@ class Word {
 
   int? wordId;
 }
+
+@Collection()
+class Dictionary {
+  Id id = Isar.autoIncrement;
+
+  String? name;
+
+  String? directory;
+}

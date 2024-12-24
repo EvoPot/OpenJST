@@ -10,4 +10,6 @@ class dictionaryDatabase {
     final dir = await getApplicationDocumentsDirectory();
     isar = await Isar.open([WordSchema], directory: dir.path);
   }
+
+  Future<void> addword(String word, String reading, String) async {}
 }
