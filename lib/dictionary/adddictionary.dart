@@ -36,9 +36,14 @@ class AddDictionaryButton extends StatelessWidget {
         final archive = ZipDecoder().decodeBytes(bytes);
 
         for (var file in archive) {
-          final filename = "${newDir.path}/${file.name}";
-          await File(filename).writeAsBytes(file.content);
-          print("extracted $filename");
+          final filePath = "${newDir.path}/${file.name}";
+          if (file.isFile) {
+            final filename = "${newDir.path}/${file.name}";
+            await File(filename).writeAsBytes(file.content);
+            print("extracted $filename");
+          } else if (file.isDirectory) {
+            await Directory(filePath).create(recursive: true);
+          }
         }
       } catch (e) {
         print("Error extracting ZIP: $e");

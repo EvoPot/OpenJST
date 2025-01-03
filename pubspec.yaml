@@ -45,6 +45,7 @@ dependencies:
   flutter_archive: ^6.0.3
   random_string: ^2.3.1
   archive: ^4.0.2
+  provider: ^6.1.2
 
 dev_dependencies:
   analyzer : ^5.13.0
