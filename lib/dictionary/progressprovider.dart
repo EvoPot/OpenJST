@@ -22,7 +22,7 @@ class ProgressProvider extends ChangeNotifier {
 
   void reset() {
     max = 1;
-    progress = 1;
+    progress = 0;
     message = "";
   }
 }
