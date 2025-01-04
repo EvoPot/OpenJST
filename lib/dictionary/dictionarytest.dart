@@ -6,7 +6,7 @@ import 'dictionary.dart';
 import 'adddictionary.dart';
 import 'isar/operations.dart';
 
-void main() async{
+void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await DictionaryOperations.initialize();
   runApp(ChangeNotifierProvider(
@@ -23,6 +23,9 @@ class HomePage extends StatelessWidget {
       home: Scaffold(
           body: Column(
         children: [
+          MaterialButton(onPressed: () {
+            print(DictionaryOperations().searchWords("打"));
+          }),
           AddDictionaryButton(),
           Expanded(
             child: ListView.builder(
