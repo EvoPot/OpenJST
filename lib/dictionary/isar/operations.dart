@@ -45,7 +45,6 @@ class DictionaryOperations {
         if (jsonifiedString[0].contains(searchterm) ||
             jsonifiedString[1].contains(searchterm)) {
           result.add(i.surface!);
-          print("added $jsonifiedString");
         }
       } catch (e) {
         print(i.surface!);
