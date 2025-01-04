@@ -3,21 +3,18 @@ import 'dart:io';
 
 
 import 'package:isar/isar.dart';
-import 'package:openjst/dictionary/isar/dict.dart';
 import 'package:openjst/dictionary/isar/word.dart';
 import 'package:path_provider/path_provider.dart';
 
 class DictionaryOperations{
-  static late Isar words;
-  static late Isar dictionaries;
+  static late Isar isar;
 
 
   //initialize ig
   static Future<void> initialize() async{
     //am i doing this correctly
     final dir = await getApplicationDocumentsDirectory();
-    words = await Isar.open([WordSchema], directory: dir.path);
-    dictionaries = await Isar.open([DictSchema], directory: dir.path);
+    isar = await Isar.open([WordSchema,DictSchema], directory: dir.path);
   }
 
 
@@ -25,21 +22,21 @@ class DictionaryOperations{
 
   Future<int> addDictionary(String surface) async{
     final newDict = Dict()..surface = surface;
-    await dictionaries.writeTxn(() => dictionaries.dicts.put(newDict));
+    await isar.writeTxn(() => isar.dicts.put(newDict));
     return newDict.id;
   }
 
   Future<void> addWord(String surface, int dictionaryId) async{
     final newWord = Word()..surface = surface
     ..dictionaryId = dictionaryId;
-    await words.writeTxn(() => words.words.put(newWord));
+    await isar.writeTxn(() => isar.words.put(newWord));
   }
 
   // read operations
 
-  Future<List<String>> SearchWords(String searchterm) async{
+  Future<List<String>> searchWords(String searchterm) async{
 
-    final processing = await words.words.filter().surfaceContains(searchterm).findAll();
+    final processing = await isar.words.filter().surfaceContains(searchterm).findAll();
     List<String> result = [];
 
     for(Word i in processing){
@@ -49,7 +46,7 @@ class DictionaryOperations{
       try{
         
         if(jsonifiedString[0].contains(searchterm) || jsonifiedString[1].contains(searchterm)){
-          result.add(jsonDecode(i.surface!));
+          result.add(jsonifiedString);
 
         }
 
@@ -67,11 +64,11 @@ class DictionaryOperations{
   //delete operations
 
   Future<void> deleteDictionaryWords(int dictionaryId) async{
-    final delete = await words.words.filter().dictionaryIdEqualTo(dictionaryId).findAll();
+    final delete = await isar.words.filter().dictionaryIdEqualTo(dictionaryId).findAll();
 
-    await words.writeTxn(() async {
+    await isar.writeTxn(() async {
       for (Word word in delete) {
-        await words.words.delete(word.id);
+        await isar.words.delete(word.id);
       }
     });
 
@@ -80,10 +77,10 @@ class DictionaryOperations{
   Future<void> deleteDictionary(int dictionaryId) async{
     await deleteDictionaryWords(dictionaryId);
 
-    await dictionaries.writeTxn(() async{
-      final delete = await dictionaries.dicts.get(dictionaryId);
+    await isar.writeTxn(() async{
+      final delete = await isar.dicts.get(dictionaryId);
       if (delete != null){
-        await dictionaries.dicts.delete(delete.id);
+        await isar.dicts.delete(delete.id);
       }
     });
   }

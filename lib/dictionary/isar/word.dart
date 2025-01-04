@@ -12,3 +12,9 @@ class Word{
   int? dictionaryId;
 
 }
+
+@Collection()
+class Dict{
+  Id id = Isar.autoIncrement;
+  String? surface;
+}

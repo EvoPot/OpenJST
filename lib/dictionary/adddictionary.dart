@@ -102,7 +102,7 @@ class AddDictionaryButton extends StatelessWidget {
       } catch (e) {
         print("Error extracting ZIP: $e");
       } finally {
-        print(DictionaryOperations().SearchWords("打"));
+        print(DictionaryOperations().searchWords("打"));
         Navigator.of(context)
             .pop(); // Close the alert dialog after everything is complete
       }
