@@ -11,5 +11,22 @@ class dictionaryDatabase {
     isar = await Isar.open([WordSchema], directory: dir.path);
   }
 
-  Future<void> addword(String word, String reading, String) async {}
+  
+
+  Future<void> addWord(
+      Isar isar, String term, String reading, List<String> definitions) async {
+    final word = Word()
+      ..term = term
+      ..reading = reading
+      ..definitions = definitions;
+
+    await isar.writeTxn(() async {
+      await isar.words.put(word);
+    });
+  }
+
+  Future<List<Word>> searchWordByString(Isar isar, String searchterm) async {
+    final result = await isar.words.filter().termContains(searchterm).findAll();
+    return result;
+  }
 }
