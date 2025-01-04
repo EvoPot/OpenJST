@@ -1,7 +1,7 @@
 import 'package:isar/isar.dart';
 
 
-part '../word.g.dart';
+part 'word.g.dart';
 
 @Collection()
 class Word{

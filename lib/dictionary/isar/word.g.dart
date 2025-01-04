@@ -1,6 +1,6 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'isar/word.dart';
+part of 'word.dart';
 
 // **************************************************************************
 // IsarCollectionGenerator
