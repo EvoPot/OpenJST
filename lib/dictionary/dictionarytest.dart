@@ -4,8 +4,11 @@ import 'package:openjst/dictionary/progressprovider.dart';
 import 'package:provider/provider.dart';
 import 'dictionary.dart';
 import 'adddictionary.dart';
+import 'isar/operations.dart';
 
-void main() {
+void main() async{
+  WidgetsFlutterBinding.ensureInitialized();
+  await DictionaryOperations.initialize();
   runApp(ChangeNotifierProvider(
       create: (_) => ProgressProvider(), child: const HomePage()));
 }
