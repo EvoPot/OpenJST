@@ -30,7 +30,7 @@ class _HomePageState extends State<HomePage> {
   final TextEditingController _controller = TextEditingController();
   String selectableText = "";
   String selectedText = "";
-  List queryList = [];
+  List<List<dynamic>> queryList = [];
 
   void updateText() {
     setState(() {
@@ -39,7 +39,11 @@ class _HomePageState extends State<HomePage> {
   }
 
   Future<void> updateSearchQuery(String input) async {
-    List queryResult = await DictionaryOperations().searchWords(input);
+    setState(() {
+      queryList.clear();
+    });
+    List<List<dynamic>> queryResult =
+        await DictionaryOperations().searchWords(input);
 
     setState(() {
       selectedText = input;
@@ -52,14 +56,22 @@ class _HomePageState extends State<HomePage> {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       home: Scaffold(
-          backgroundColor: Colors.lightBlue[200],
+          backgroundColor: Colors.deepPurple[200],
           body: ListView(
             children: [
-              Text("Welcome to the OpenJST Demo #1!"),
-              Text("Try adding a dictionary using the button below!"),
+              Text(
+                "Welcome to OpenJST Demo #1!",
+                style: TextStyle(fontSize: 40),
+              ),
+              Text(
+                "Try adding a dictionary using the button below!",
+                style: TextStyle(fontSize: 30),
+              ),
               AddDictionaryButton(),
               Text(
-                  "Well done! now write some text into the section below, and then click on update"),
+                "Well done! now write some text into the section below, and then click on update",
+                style: TextStyle(fontSize: 30),
+              ),
               Row(
                 children: [
                   Expanded(
@@ -74,17 +86,37 @@ class _HomePageState extends State<HomePage> {
                   text: selectableText,
                   rowLength: 33,
                   textOutputFunction: updateSearchQuery),
-              Text("You have currently selected $selectedText!"),
-              Expanded(
-                child: ListView.builder(
-                    shrinkWrap: true,
-                    itemCount: queryList.length,
-                    itemBuilder: (context, index) {
-                      return Dictionarytile(dictionary: queryList, item: index);
-                    }),
-              )
+              Text(
+                "You have currently selected $selectedText!",
+                style: TextStyle(fontSize: 30),
+              ),
+              ListOfResults(results: queryList)
             ],
           )),
     );
+  }
+}
+
+class ListOfResults extends StatefulWidget {
+  final List<List<dynamic>> results;
+  const ListOfResults({super.key, required this.results});
+
+  @override
+  State<ListOfResults> createState() => _ListOfResultsState();
+}
+
+class _ListOfResultsState extends State<ListOfResults> {
+  @override
+  Widget build(BuildContext context) {
+    print(" results are ${widget.results}");
+    return widget.results.length != 0
+        ? ListView.builder(
+            key: Key(widget.results.hashCode.toString()),
+            shrinkWrap: true,
+            itemCount: widget.results.length,
+            itemBuilder: (context, index) {
+              return Dictionarytile(dictionary: widget.results, item: index);
+            })
+        : Text("start seaching for a word!");
   }
 }

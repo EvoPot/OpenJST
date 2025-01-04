@@ -22,8 +22,7 @@ class _DictionarytileState extends State<Dictionarytile> {
   void initState() {
     super.initState();
     print(widget.item);
-    print(jsonEncode(widget.dictionary));
-    print(widget.dictionary[widget.item]);
+    print(jsonEncode(widget.dictionary[widget.item]));
     print(widget.dictionary.runtimeType);
     word = widget.dictionary[widget.item][0];
     hiragana = widget.dictionary[widget.item][1];
