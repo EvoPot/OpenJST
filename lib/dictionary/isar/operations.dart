@@ -32,11 +32,11 @@ class DictionaryOperations {
 
   // read operations
 
-  Future<List<String>> searchWords(String searchterm) async {
+  Future<List<List<dynamic>>> searchWords(String searchterm) async {
     final processing =
         await isar.words.filter().surfaceContains(searchterm).findAll();
 
-    List<String> result = [];
+    List<List<dynamic>> result = [];
 
     for (Word i in processing) {
       final jsonifiedString = jsonDecode(i.surface!);
@@ -44,10 +44,10 @@ class DictionaryOperations {
       try {
         if (jsonifiedString[0].contains(searchterm) ||
             jsonifiedString[1].contains(searchterm)) {
-          result.add(i.surface!);
+          result.add(jsonifiedString);
         }
       } catch (e) {
-        print(i.surface!);
+        print(jsonEncode(i.surface!));
         print(e);
       }
     }

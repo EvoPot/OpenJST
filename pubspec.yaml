@@ -68,6 +68,7 @@ dev_dependencies:
 flutter:
   assets:
     - assets/images/
+    - assets/mecab-dictionary/ipadic/
     # well its kinda annoying to work with these but well whatever
 
   # The following line ensures that the Material Icons font is

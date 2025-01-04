@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:openjst/dictionary/dictionarytile.dart';
 import 'package:openjst/dictionary/progressprovider.dart';
@@ -37,9 +39,11 @@ class _HomePageState extends State<HomePage> {
   }
 
   Future<void> updateSearchQuery(String input) async {
-    setState(() async {
-      selectableText = input;
-      queryList = await DictionaryOperations().searchWords(input);
+    List queryResult = await DictionaryOperations().searchWords(input);
+
+    setState(() {
+      selectedText = input;
+      queryList = queryResult;
     });
   }
 
@@ -58,8 +62,10 @@ class _HomePageState extends State<HomePage> {
                   "Well done! now write some text into the section below, and then click on update"),
               Row(
                 children: [
-                  TextField(
-                    controller: _controller,
+                  Expanded(
+                    child: TextField(
+                      controller: _controller,
+                    ),
                   ),
                   ElevatedButton(onPressed: updateText, child: Text("update"))
                 ],
@@ -68,15 +74,15 @@ class _HomePageState extends State<HomePage> {
                   text: selectableText,
                   rowLength: 33,
                   textOutputFunction: updateSearchQuery),
-              Text("You currently selected $selectedText!"),
+              Text("You have currently selected $selectedText!"),
               Expanded(
-                  child: ListView.builder(
-                      shrinkWrap: true,
-                      itemCount: queryList.length,
-                      itemBuilder: (context, index) {
-                        return Dictionarytile(
-                            dictionary: queryList, item: index);
-                      }))
+                child: ListView.builder(
+                    shrinkWrap: true,
+                    itemCount: queryList.length,
+                    itemBuilder: (context, index) {
+                      return Dictionarytile(dictionary: queryList, item: index);
+                    }),
+              )
             ],
           )),
     );

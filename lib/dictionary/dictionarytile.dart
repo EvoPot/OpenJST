@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'structuredcontent.dart';
 
@@ -19,6 +21,10 @@ class _DictionarytileState extends State<Dictionarytile> {
   @override
   void initState() {
     super.initState();
+    print(widget.item);
+    print(jsonEncode(widget.dictionary));
+    print(widget.dictionary[widget.item]);
+    print(widget.dictionary.runtimeType);
     word = widget.dictionary[widget.item][0];
     hiragana = widget.dictionary[widget.item][1];
     definitions = widget.dictionary[widget.item][5];
