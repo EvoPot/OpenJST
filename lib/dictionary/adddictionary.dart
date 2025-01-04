@@ -8,6 +8,7 @@ import 'package:file_picker/file_picker.dart';
 import 'package:provider/provider.dart';
 import 'dart:convert';
 import 'package:path/path.dart' as p;
+import 'isar/operations.dart';
 
 //hello from the main pc
 
@@ -64,6 +65,8 @@ class AddDictionaryButton extends StatelessWidget {
         final archive = ZipDecoder().decodeBytes(bytes);
         progressProvider.changeMax(archive.length);
 
+        int newDictionaryId = await DictionaryOperations().addDictionary("test dictionary");
+
         for (var file in archive) {
           //extract the files in the zip
           final filePath = "${newDir.path}/${file.name}";
@@ -78,6 +81,7 @@ class AddDictionaryButton extends StatelessWidget {
                 String jsonString = await File(filePath).readAsString();
 
                 var jsonObject = jsonDecode(jsonString);
+                DictionaryOperations().addWord(jsonString, newDictionaryId);
 
                 print(jsonObject);
 
@@ -98,6 +102,7 @@ class AddDictionaryButton extends StatelessWidget {
       } catch (e) {
         print("Error extracting ZIP: $e");
       } finally {
+        print(DictionaryOperations().SearchWords("打"));
         Navigator.of(context)
             .pop(); // Close the alert dialog after everything is complete
       }

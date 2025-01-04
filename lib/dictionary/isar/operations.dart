@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'dart:io';
 
+
 import 'package:isar/isar.dart';
 import 'package:openjst/dictionary/isar/dict.dart';
 import 'package:openjst/dictionary/isar/word.dart';
@@ -22,9 +23,10 @@ class DictionaryOperations{
 
   //write operations
 
-  Future<void> addDictionary(String surface) async{
+  Future<int> addDictionary(String surface) async{
     final newDict = Dict()..surface = surface;
     await dictionaries.writeTxn(() => dictionaries.dicts.put(newDict));
+    return newDict.id;
   }
 
   Future<void> addWord(String surface, int dictionaryId) async{
