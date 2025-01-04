@@ -9,6 +9,8 @@ import 'package:provider/provider.dart';
 import 'dart:convert';
 import 'package:path/path.dart' as p;
 
+//hello from the main pc
+
 class AddDictionaryButton extends StatelessWidget {
   const AddDictionaryButton({super.key});
 
