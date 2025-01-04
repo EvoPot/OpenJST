@@ -5,10 +5,13 @@ import 'package:provider/provider.dart';
 import 'dictionary.dart';
 import 'adddictionary.dart';
 import 'isar/operations.dart';
+import 'package:path_provider/path_provider.dart';
 
 void main() async {
+  print(await getApplicationDocumentsDirectory());
   WidgetsFlutterBinding.ensureInitialized();
   await DictionaryOperations.initialize();
+  print(await DictionaryOperations().getAllSurfaces());
   runApp(ChangeNotifierProvider(
       create: (_) => ProgressProvider(), child: const HomePage()));
 }
@@ -23,9 +26,11 @@ class HomePage extends StatelessWidget {
       home: Scaffold(
           body: Column(
         children: [
-          MaterialButton(onPressed: () {
-            print(DictionaryOperations().searchWords("打"));
-          }),
+          MaterialButton(
+              child: Text("h"),
+              onPressed: () async {
+                print(await DictionaryOperations().searchWords("打"));
+              }),
           AddDictionaryButton(),
           Expanded(
             child: ListView.builder(

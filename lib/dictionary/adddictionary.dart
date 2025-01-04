@@ -1,6 +1,8 @@
 import 'dart:io';
 import 'dart:math';
 import 'package:archive/archive.dart';
+import 'package:isar/isar.dart';
+import 'package:openjst/dictionary/isar/word.dart';
 import 'package:openjst/dictionary/progressprovider.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:flutter/material.dart';
@@ -65,7 +67,8 @@ class AddDictionaryButton extends StatelessWidget {
         final archive = ZipDecoder().decodeBytes(bytes);
         progressProvider.changeMax(archive.length);
 
-        int newDictionaryId = await DictionaryOperations().addDictionary("test dictionary");
+        int newDictionaryId =
+            await DictionaryOperations().addDictionary("test dictionary");
 
         for (var file in archive) {
           //extract the files in the zip
@@ -81,14 +84,13 @@ class AddDictionaryButton extends StatelessWidget {
                 String jsonString = await File(filePath).readAsString();
 
                 var jsonObject = jsonDecode(jsonString);
-                DictionaryOperations().addWord(jsonString, newDictionaryId);
 
                 print(jsonObject);
 
                 if (jsonObject is List) {
                   for (var i in jsonObject) {
-                    print(
-                        i); // temporary solution just like every other solution lmao
+                    await DictionaryOperations()
+                        .addWord(jsonEncode(i), newDictionaryId);
                   }
                 }
             }
@@ -102,7 +104,7 @@ class AddDictionaryButton extends StatelessWidget {
       } catch (e) {
         print("Error extracting ZIP: $e");
       } finally {
-        print(DictionaryOperations().searchWords("打"));
+        print(DictionaryOperations().getAllSurfaces());
         Navigator.of(context)
             .pop(); // Close the alert dialog after everything is complete
       }
