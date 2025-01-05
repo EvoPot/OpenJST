@@ -94,4 +94,18 @@ class DictionaryOperations {
       }
     });
   }
+
+  Future<void> deleteAll() async {
+    await isar.writeTxn(() async {
+    await isar.words.clear();
+    await isar.dicts.clear();
+  });
+}
+
+
+
+
+
+
+
 }

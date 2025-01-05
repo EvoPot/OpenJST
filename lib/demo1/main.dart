@@ -11,7 +11,6 @@ import 'package:path_provider/path_provider.dart';
 import '../text/selectablesubtitle.dart';
 
 void main() async {
-  print(await getApplicationDocumentsDirectory());
   WidgetsFlutterBinding.ensureInitialized();
   await DictionaryOperations.initialize();
   print(await DictionaryOperations().getAllSurfaces());
@@ -90,7 +89,8 @@ class _HomePageState extends State<HomePage> {
                 "You have currently selected $selectedText!",
                 style: TextStyle(fontSize: 30),
               ),
-              ListOfResults(results: queryList)
+              ListOfResults(results: queryList),
+              ElevatedButton(onPressed: ()=> DictionaryOperations().deleteAll, child: Text("delete all dictionaries... spooky"))
             ],
           )),
     );

@@ -25,8 +25,8 @@ subprojects {
         // Apply the namespace configuration if not already set
         if (project.hasProperty("android")) {
             project.android {
-                if (namespace == null) {
-                    namespace project.group
+                if (!project.android.hasProperty("namespace")) {
+                    project.android.namespace = project.group
                 }
             }
         }
