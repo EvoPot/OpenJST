@@ -88,21 +88,19 @@ class _SelectableSubtitleState extends State<SelectableSubtitle> {
       context: context,
       removeTop: true,
       child: SizedBox(
-        height: 300,
-        child: GridView.builder(
-            itemCount: pureText.length,
-            gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                crossAxisCount: widget.rowLength),
-            itemBuilder: (context, index) {
-              return SelectableTextTile(
-                  tileText: pureText[index],
-                  expectedValue: index,
-                  onTapFunction: (int index) {
-                    widget.textOutputFunction(
-                        getListItemFromIndex(tagger.parse(widget.text), index));
-                  });
-            }),
-      ),
+          height: 300,
+          child: Wrap(
+            children: List.generate(
+                pureText.length,
+                (index) => SelectableTextTile(
+                      expectedValue: index,
+                      tileText: pureText[index],
+                      onTapFunction: (int index) {
+                        widget.textOutputFunction(getListItemFromIndex(
+                            tagger.parse(widget.text), index));
+                      },
+                    )),
+          )),
     );
   }
 }

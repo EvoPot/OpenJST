@@ -11,6 +11,7 @@ import 'package:path_provider/path_provider.dart';
 import '../text/selectablesubtitle.dart';
 
 void main() async {
+  print(await getApplicationDocumentsDirectory());
   WidgetsFlutterBinding.ensureInitialized();
   await DictionaryOperations.initialize();
   print(await DictionaryOperations().getAllSurfaces());
@@ -82,15 +83,17 @@ class _HomePageState extends State<HomePage> {
                 ],
               ),
               SelectableSubtitle(
-                  text: selectableText,
-                  rowLength: 33,
-                  textOutputFunction: updateSearchQuery),
+                  text: selectableText, textOutputFunction: updateSearchQuery),
               Text(
                 "You have currently selected $selectedText!",
                 style: TextStyle(fontSize: 30),
               ),
               ListOfResults(results: queryList),
-              ElevatedButton(onPressed: ()=> DictionaryOperations().deleteAll, child: Text("delete all dictionaries... spooky"))
+              Text(
+                  "Did things get a little messy? Try resetting the dictionary database using the button below:"),
+              ElevatedButton(
+                  onPressed: () => DictionaryOperations().resetAll(),
+                  child: Text("spooky button"))
             ],
           )),
     );
@@ -117,6 +120,6 @@ class _ListOfResultsState extends State<ListOfResults> {
             itemBuilder: (context, index) {
               return Dictionarytile(dictionary: widget.results, item: index);
             })
-        : Text("start seaching for a word!");
+        : Text("you havent searched for anything yet!");
   }
 }

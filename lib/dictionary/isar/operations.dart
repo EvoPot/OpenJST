@@ -95,17 +95,13 @@ class DictionaryOperations {
     });
   }
 
-  Future<void> deleteAll() async {
+  Future<void> resetAll() async {
     await isar.writeTxn(() async {
-    await isar.words.clear();
-    await isar.dicts.clear();
-  });
-}
+      // Delete all words
+      await isar.words.clear();
 
-
-
-
-
-
-
+      // Delete all dictionaries
+      await isar.dicts.clear();
+    });
+  }
 }
