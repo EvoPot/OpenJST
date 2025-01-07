@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-//These are the only colors that the app calls for its menus. feel free to edit them
+//These are the only colors that the app calls for its menus. Feel free to edit them
 
 class appColors {
   final Color secondaryAccentColor = Color.fromARGB(255, 199, 104, 236);

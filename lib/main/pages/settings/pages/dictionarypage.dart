@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../../../../dictionary/adddictionary.dart'; //damn nice import bro!!
 
 class DictionaryPage extends StatelessWidget {
   const DictionaryPage({super.key});
@@ -11,7 +12,8 @@ class DictionaryPage extends StatelessWidget {
           'Dictionary Settings',
           style: TextStyle(
               fontSize: 40, fontWeight: FontWeight.bold, color: Colors.white),
-        )
+        ),
+        AddDictionaryButton(text: 'Add a dictionary...')
       ],
     );
   }

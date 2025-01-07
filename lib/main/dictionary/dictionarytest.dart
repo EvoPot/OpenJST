@@ -31,7 +31,9 @@ class HomePage extends StatelessWidget {
               onPressed: () async {
                 print(await DictionaryOperations().searchWords("打"));
               }),
-          AddDictionaryButton(),
+          AddDictionaryButton(
+            text: 'add a dictionary',
+          ),
           Expanded(
             child: ListView.builder(
               shrinkWrap: true,

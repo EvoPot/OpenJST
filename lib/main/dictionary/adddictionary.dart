@@ -1,8 +1,6 @@
 import 'dart:io';
 import 'dart:math';
 import 'package:archive/archive.dart';
-import 'package:isar/isar.dart';
-import 'package:openjst/dictionary/isar/word.dart';
 import 'package:openjst/dictionary/progressprovider.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:flutter/material.dart';
@@ -22,7 +20,7 @@ class AddDictionaryButton extends StatelessWidget {
     required this.text,
   });
 
-  appColors colors = appColors();
+  final appColors colors = appColors();
 
   String randomString(int length) {
     const chars = 'abcdefghijklmnopqrstuvwxyz0123456789';
@@ -45,7 +43,7 @@ class AddDictionaryButton extends StatelessWidget {
               builder: (context, value, child) => Column(
                 children: [
                   LinearProgressIndicator(
-                    value: (value.progress / value.max) ?? 1,
+                    value: (value.progress / value.max),
                   ),
                   Text("${value.progress}/${value.max}"),
                   Text(value.message)
@@ -124,7 +122,7 @@ class AddDictionaryButton extends StatelessWidget {
         onPressed: () => getZipFile(context),
         child: Text(text),
         style: ButtonStyle(
-          backgroundColor: WidgetStateProperty.all(colors.darkGrey),
+          backgroundColor: WidgetStateProperty.all(colors.slightlyDarkerGrey),
           foregroundColor: WidgetStateProperty.all(colors.mainAccentColor),
         ));
   }

@@ -67,7 +67,9 @@ class _HomePageState extends State<HomePage> {
                 "Try adding a dictionary using the button below!",
                 style: TextStyle(fontSize: 30),
               ),
-              AddDictionaryButton(),
+              AddDictionaryButton(
+                text: 'add a dictionary',
+              ),
               Text(
                 "Well done! now write some text into the section below, and then click on update",
                 style: TextStyle(fontSize: 30),
