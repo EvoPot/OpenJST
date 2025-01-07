@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:openjst/dictionary/dictionarytile.dart';
-import 'package:openjst/dictionary/progressprovider.dart';
+import 'package:openjst/main/dictionary/dictionarytile.dart';
+import 'package:openjst/main/dictionary/progressprovider.dart';
 import 'package:provider/provider.dart';
 import 'dictionary.dart';
 import 'adddictionary.dart';

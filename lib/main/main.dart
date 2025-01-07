@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'pages/settings/settingspage.dart';
 import 'pages/videoplayer/videoplayerpage.dart';
 import 'appstyle/colors.dart';
-import 'package:openjst/dictionary/dictionarytest.dart';
+import 'package:openjst/main/dictionary/dictionarytest.dart';
 
 void main() {
   runApp(HomePage());

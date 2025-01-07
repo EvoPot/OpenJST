@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import '../../../../dictionary/adddictionary.dart'; //damn nice import bro!!
+import '../../../dictionary/adddictionary.dart'; //damn nice import bro!!
 
 class DictionaryPage extends StatelessWidget {
   const DictionaryPage({super.key});

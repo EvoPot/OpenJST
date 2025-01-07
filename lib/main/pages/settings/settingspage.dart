@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:openjst/dictionary/adddictionary.dart';
+import 'package:openjst/main/dictionary/adddictionary.dart';
 import 'pages/dictionarypage.dart';
 import 'pages/stylepage.dart';
 import '../../appstyle/colors.dart';

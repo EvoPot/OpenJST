@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'text/selectablesubtitle.dart';
+import 'main/text/selectablesubtitle.dart';
 
 void main() {
   runApp(const MainPage());

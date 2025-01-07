@@ -1,14 +1,14 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
-import 'package:openjst/dictionary/dictionarytile.dart';
-import 'package:openjst/dictionary/progressprovider.dart';
+import 'package:openjst/main/dictionary/dictionarytile.dart';
+import 'package:openjst/main/dictionary/progressprovider.dart';
 import 'package:provider/provider.dart';
-import '../dictionary/dictionary.dart';
-import '../dictionary/adddictionary.dart';
-import '../dictionary/isar/operations.dart';
+import '../main/dictionary/dictionary.dart';
+import '../main/dictionary/adddictionary.dart';
+import '../main/dictionary/isar/operations.dart';
 import 'package:path_provider/path_provider.dart';
-import '../text/selectablesubtitle.dart';
+import '../main/text/selectablesubtitle.dart';
 
 void main() async {
   print(await getApplicationDocumentsDirectory());
