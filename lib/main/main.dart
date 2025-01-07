@@ -9,18 +9,27 @@ void main() {
   runApp(HomePage());
 }
 
-class HomePage extends StatelessWidget {
+class HomePage extends StatefulWidget {
   HomePage({super.key});
 
+  static const List<Widget> homePageOptions = [
+    Videoplayerpage(),
+    SettingsPage()
+  ];
+
+  @override
+  State<HomePage> createState() => _HomePageState();
+}
+
+class _HomePageState extends State<HomePage> {
   int _selectedIndex = 0;
-  static const List<Widget> homePageOptions = [];
 
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       home: Scaffold(
-        body: Placeholder(),
+        body: HomePage.homePageOptions[_selectedIndex],
         bottomNavigationBar: BottomNavigationBar(
           items: [
             BottomNavigationBarItem(
@@ -29,7 +38,9 @@ class HomePage extends StatelessWidget {
                 icon: Icon(Icons.settings_rounded), label: 'Settings')
           ],
           currentIndex: _selectedIndex,
-          onTap: (value) => _selectedIndex = value,
+          onTap: (value) => setState(() {
+            _selectedIndex = value;
+          }),
           selectedItemColor: Colors.amber,
         ),
       ),
