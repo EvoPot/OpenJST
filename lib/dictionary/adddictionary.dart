@@ -11,11 +11,18 @@ import 'package:provider/provider.dart';
 import 'dart:convert';
 import 'package:path/path.dart' as p;
 import 'isar/operations.dart';
+import '../main/appstyle/colors.dart';
 
 //hello from the main pc
 
 class AddDictionaryButton extends StatelessWidget {
-  const AddDictionaryButton({super.key});
+  final String text;
+  AddDictionaryButton({
+    super.key,
+    required this.text,
+  });
+
+  appColors colors = appColors();
 
   String randomString(int length) {
     const chars = 'abcdefghijklmnopqrstuvwxyz0123456789';
@@ -113,9 +120,12 @@ class AddDictionaryButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialButton(
-      onPressed: () => getZipFile(context),
-      child: Text('Add a dictionary...'),
-    );
+    return TextButton(
+        onPressed: () => getZipFile(context),
+        child: Text(text),
+        style: ButtonStyle(
+          backgroundColor: WidgetStateProperty.all(colors.darkGrey),
+          foregroundColor: WidgetStateProperty.all(colors.mainAccentColor),
+        ));
   }
 }
