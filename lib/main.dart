@@ -32,7 +32,6 @@ class _MainPageState extends State<MainPage> {
             SelectableSubtitle(
               text:
                   '私はここで花粉を拾い、それを振りかけるこっちだ たぶんあそこにダッシュ,. それにピンチ。 見えるか? それは魔法の少し .',
-              rowLength: 33,
               textOutputFunction: updateBottomText,
             ),
             Text(bottomText)

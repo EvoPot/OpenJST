@@ -6,13 +6,9 @@ import 'package:mecab_dart/mecab_dart.dart';
 
 class SelectableSubtitle extends StatefulWidget {
   final String text;
-  final int rowLength;
   final Function(String) textOutputFunction;
   const SelectableSubtitle(
-      {super.key,
-      required this.text,
-      required this.rowLength,
-      required this.textOutputFunction});
+      {super.key, required this.text, required this.textOutputFunction});
 
   @override
   State<SelectableSubtitle> createState() => _SelectableSubtitleState();
