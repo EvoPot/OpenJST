@@ -1,13 +1,20 @@
 //THIS IS WHERE THE APPS MAIN CODE IS STORED --- WELCOME!
 
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'pages/settings/settingspage.dart';
 import 'pages/videoplayer/videoplayerpage.dart';
 import 'appstyle/colors.dart';
 import 'package:openjst/main/dictionary/dictionarytest.dart';
+import 'progressprovider.dart';
+import 'package:path_provider/path_provider.dart';
+import 'dictionary/operations.dart';
 
-void main() {
-  runApp(HomePage());
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await DictionaryOperations.initialize();
+  runApp(ChangeNotifierProvider(
+      create: (_) => ProgressProvider(), child: HomePage()));
 }
 
 class HomePage extends StatefulWidget {

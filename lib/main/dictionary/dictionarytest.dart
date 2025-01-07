@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:openjst/main/dictionary/dictionarytile.dart';
-import 'package:openjst/main/dictionary/progressprovider.dart';
+import 'package:openjst/main/progressprovider.dart';
 import 'package:provider/provider.dart';
 import 'dictionary.dart';
 import 'adddictionary.dart';
-import 'isar/operations.dart';
+import 'operations.dart';
 import 'package:path_provider/path_provider.dart';
 
 void main() async {

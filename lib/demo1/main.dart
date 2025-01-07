@@ -2,11 +2,11 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:openjst/main/dictionary/dictionarytile.dart';
-import 'package:openjst/main/dictionary/progressprovider.dart';
+import 'package:openjst/main/progressprovider.dart';
 import 'package:provider/provider.dart';
 import '../main/dictionary/dictionary.dart';
 import '../main/dictionary/adddictionary.dart';
-import '../main/dictionary/isar/operations.dart';
+import '../main/dictionary/operations.dart';
 import 'package:path_provider/path_provider.dart';
 import '../main/text/selectablesubtitle.dart';
 

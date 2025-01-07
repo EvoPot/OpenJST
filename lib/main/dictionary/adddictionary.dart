@@ -1,14 +1,14 @@
 import 'dart:io';
 import 'dart:math';
 import 'package:archive/archive.dart';
-import 'package:openjst/main/dictionary/progressprovider.dart';
+import 'package:openjst/main/progressprovider.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:provider/provider.dart';
 import 'dart:convert';
 import 'package:path/path.dart' as p;
-import 'isar/operations.dart';
+import 'operations.dart';
 import '../appstyle/colors.dart';
 
 //hello from the main pc
