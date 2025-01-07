@@ -21,6 +21,6 @@ class OpenVideoPlayerButton extends StatelessWidget {
             backgroundColor: WidgetStateProperty.all(colors.slightlyDarkerGrey),
             foregroundColor: WidgetStateProperty.all(colors.mainAccentColor)),
         onPressed: () => openPlayer(context),
-        child: Text('go to video player ehehe'));
+        child: Text(text));
   }
 }
