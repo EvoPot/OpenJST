@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import '../../appstyle/colors.dart';
-import 'player/player.dart';
+import 'openvideoplayerbutton.dart';
 
 class Videoplayerpage extends StatelessWidget {
   const Videoplayerpage({super.key});
@@ -12,10 +12,7 @@ class Videoplayerpage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: colors.darkGrey,
-      body: TextButton(
-          onPressed: () => Navigator.push(
-              context, MaterialPageRoute(builder: (context) => Player())),
-          child: Text('go to video player ehehe')),
+      body: OpenVideoPlayerButton(text: 'Open a video file'),
     );
   }
 }

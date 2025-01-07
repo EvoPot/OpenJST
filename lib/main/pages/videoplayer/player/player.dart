@@ -10,6 +10,6 @@ class Player extends StatefulWidget {
 class _PlayerState extends State<Player> {
   @override
   Widget build(BuildContext context) {
-    return const Placeholder();
+    return Stack();
   }
 }

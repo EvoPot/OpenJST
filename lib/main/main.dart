@@ -5,7 +5,6 @@ import 'package:provider/provider.dart';
 import 'pages/settings/settingspage.dart';
 import 'pages/videoplayer/videoplayerpage.dart';
 import 'appstyle/colors.dart';
-import 'package:openjst/main/dictionary/dictionarytest.dart';
 import 'progressprovider.dart';
 import 'package:path_provider/path_provider.dart';
 import 'dictionary/operations.dart';
