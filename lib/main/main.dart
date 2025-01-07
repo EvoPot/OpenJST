@@ -1,8 +1,8 @@
 //THIS IS WHERE THE APPS MAIN CODE IS STORED --- WELCOME!
 
 import 'package:flutter/material.dart';
-import 'pages/settingspage.dart';
-import 'pages/videoplayerpage.dart';
+import 'pages/settings/settingspage.dart';
+import 'pages/videoplayer/videoplayerpage.dart';
 import 'package:openjst/dictionary/dictionarytest.dart';
 
 void main() {
