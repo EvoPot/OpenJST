@@ -3,6 +3,7 @@
 import 'package:flutter/material.dart';
 import 'pages/settings/settingspage.dart';
 import 'pages/videoplayer/videoplayerpage.dart';
+import 'appstyle/colors.dart';
 import 'package:openjst/dictionary/dictionarytest.dart';
 
 void main() {
@@ -12,7 +13,7 @@ void main() {
 class HomePage extends StatefulWidget {
   HomePage({super.key});
 
-  static const List<Widget> homePageOptions = [
+  static final List<Widget> homePageOptions = [
     Videoplayerpage(),
     SettingsPage()
   ];
@@ -33,7 +34,7 @@ class _HomePageState extends State<HomePage> {
         bottomNavigationBar: BottomNavigationBar(
           items: [
             BottomNavigationBarItem(
-                icon: Icon(Icons.video_file_rounded), label: 'Video Player'),
+                icon: Icon(Icons.play_arrow), label: 'Video Player'),
             BottomNavigationBarItem(
                 icon: Icon(Icons.settings_rounded), label: 'Settings')
           ],
@@ -41,7 +42,9 @@ class _HomePageState extends State<HomePage> {
           onTap: (value) => setState(() {
             _selectedIndex = value;
           }),
-          selectedItemColor: Colors.amber,
+          selectedItemColor: appColors().mainAccentColor,
+          backgroundColor: appColors().slightlyDarkerGrey,
+          unselectedItemColor: appColors().darkGrey,
         ),
       ),
     );
