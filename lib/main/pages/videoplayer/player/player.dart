@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import 'videoplayerlayer.dart';
 
 class Player extends StatefulWidget {
-  const Player({super.key});
+  final String path;
+  const Player({super.key, required this.path});
 
   @override
   State<Player> createState() => _PlayerState();
@@ -10,6 +12,12 @@ class Player extends StatefulWidget {
 class _PlayerState extends State<Player> {
   @override
   Widget build(BuildContext context) {
-    return Stack();
+    return Stack(
+      children: [
+        VideoPlayerLayer(
+          file: widget.path,
+        )
+      ],
+    );
   }
 }

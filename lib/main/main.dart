@@ -6,7 +6,6 @@ import 'pages/settings/settingspage.dart';
 import 'pages/videoplayer/videoplayerpage.dart';
 import 'appstyle/colors.dart';
 import 'progressprovider.dart';
-import 'package:path_provider/path_provider.dart';
 import 'dictionary/operations.dart';
 
 void main() async {
