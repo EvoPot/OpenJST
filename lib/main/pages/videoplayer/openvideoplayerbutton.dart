@@ -11,22 +11,11 @@ class OpenVideoPlayerButton extends StatelessWidget {
       appColors(); // i really dont think this is necessary
 
   void openPlayer(BuildContext context) async {
-    final FilePickerResult? result = await FilePicker.platform.pickFiles(
-        allowedExtensions: ["mp4", "mkv", "webm", "avi", "mov", "flv"],
-        type: FileType.custom);
 
-    if (result != null) {
-      //Open the video player in a new page
-
-      if (result.files.single.path != null) {
         Navigator.push(
             context,
             MaterialPageRoute(
-                builder: (context) => Player(path: result.files.single.path!)));
-      } else {
-        print('fix this');
-      }
-    }
+                builder: (context) => Player()));
   }
 
   @override
