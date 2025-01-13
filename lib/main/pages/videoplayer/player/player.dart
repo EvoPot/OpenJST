@@ -6,6 +6,7 @@ import 'package:file_picker/file_picker.dart';
 import 'playercontrollayer.dart';
 import 'pausebutton/pausebutton.dart';
 import 'package:flutter_vlc_player/flutter_vlc_player.dart';
+import 'controlbar/controlbar.dart';
 
 class Player extends StatefulWidget {
   const Player({super.key});
@@ -20,7 +21,7 @@ class _PlayerState extends State<Player> {
   late String videoPath = '';
   bool controlVisibility = false;
   bool isPlaying = true;
-  late VlcPlayerController _videoPlayerController;
+  VlcPlayerController? _videoPlayerController;
 
   @override
   void initState(){
@@ -32,8 +33,8 @@ class _PlayerState extends State<Player> {
    @override
   void dispose() {
     super.dispose();
-    _videoPlayerController.stopRendererScanning();
-    _videoPlayerController.dispose();
+    _videoPlayerController?.stopRendererScanning();
+    _videoPlayerController?.dispose();
   }
 
 
@@ -42,13 +43,14 @@ class _PlayerState extends State<Player> {
         allowedExtensions: ["mp4", "mkv", "webm", "avi", "mov", "flv"],
         type: FileType.custom);
     
-    if (result != null) {
+    if (result != null && result.files.isNotEmpty) {
       //Open the video player in a new page
+      final filePath = result.files.single.path;
     
-      if (result.files.single.path != null) {
+      if (filePath != null) {
         setState(() {
 
-          videoPath = result.files.single.path!;
+          videoPath = filePath; //If it ain't broken dont fix it buddyy
           _videoPlayerController = VlcPlayerController.file(File(videoPath));
           
         });
@@ -67,24 +69,40 @@ class _PlayerState extends State<Player> {
   }
 
   void pausePlayVideo(){
-    setState(() {
-      isPlaying != isPlaying;
-      if(isPlaying){
-        _videoPlayerController.play();
-      }else{
-        _videoPlayerController.pause();
-      }
+    if(controlVisibility){
+
+      setState(() {
+        isPlaying = !isPlaying;
+        if(isPlaying){
+          _videoPlayerController!.play();
+        }else{
+          _videoPlayerController!.pause();
+        }
     });
+
+    }
+    print("something");
 
   }
 
   @override
   Widget build(BuildContext context) {
-    return videoPath != '' ? Stack(
+    return videoPath.isNotEmpty && _videoPlayerController != null ? Stack(
       children: [
-        VideoPlayerLayer(controller: _videoPlayerController,),
-        PauseButton(onPressedFunction: pausePlayVideo, isPlaying: isPlaying),
-        PlayerControlLayer(onTapFunction: changeControlVisibility)
+        VideoPlayerLayer(controller: _videoPlayerController!,),
+        PlayerControlLayer(onTapFunction: changeControlVisibility),
+        PauseButton(onPressedFunction: pausePlayVideo, isPlaying: isPlaying, isVisible: controlVisibility,),
+        ControlBar(
+          controller: _videoPlayerController!,
+          isVisible: controlVisibility,
+          onSliderChange: (p0) {
+            print('p0 $p0');
+
+              _videoPlayerController!.seekTo(Duration(milliseconds: p0));
+
+          } ,),
+        if(!controlVisibility)PlayerControlLayer(onTapFunction: changeControlVisibility)
+
       ],
     ) : Text('the player is waiting for a video...');
     //TODO: design a page instead of returning a text
