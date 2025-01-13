@@ -8,6 +8,18 @@ import 'appstyle/colors.dart';
 import 'progressprovider.dart';
 import 'dictionary/operations.dart';
 
+/*
+   ____                       _____________
+  / __ \____  ___  ____      / / ___/_  __/
+ / / / / __ \/ _ \/ __ \__  / /\__ \ / /
+/ /_/ / /_/ /  __/ / / / /_/ /___/ // /
+\____/ .___/\___/_/ /_/\____//____//_/
+    /_/
+
+*/
+
+//these look so cool i had to
+
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await DictionaryOperations.initialize();
