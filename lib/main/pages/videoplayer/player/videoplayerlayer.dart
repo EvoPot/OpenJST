@@ -2,8 +2,6 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_vlc_player/flutter_vlc_player.dart';
-import 'package:media_kit/media_kit.dart';
-import 'package:media_kit_video/media_kit_video.dart'; 
 
 class VideoPlayerLayer extends StatefulWidget {
   final String file;
@@ -14,24 +12,29 @@ class VideoPlayerLayer extends StatefulWidget {
 }
 
 class _VideoPlayerLayerState extends State<VideoPlayerLayer> {
-  late final player = Player();
-  late final controller = VideoController(player);
+  late VlcPlayerController _videoPlayerController;
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
-    player.open(Media('file://${widget.file}'));
+    try {
+      _videoPlayerController = VlcPlayerController.file(File(widget.file));
+    } catch (e) {
+      print("uh error $e");
+    }
   }
 
   @override
-  void dispose(){
-    player.dispose();
+  void dispose() {
     super.dispose();
+    _videoPlayerController.stopRendererScanning();
+    _videoPlayerController.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
-    return Video(controller: controller);
+    return Center(
+      child: VlcPlayer(controller: _videoPlayerController, aspectRatio: 16 / 9),
+    );
   }
 }
