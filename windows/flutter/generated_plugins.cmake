@@ -5,6 +5,8 @@
 list(APPEND FLUTTER_PLUGIN_LIST
   isar_flutter_libs
   mecab_dart
+  media_kit_video
+  screen_brightness_windows
   url_launcher_windows
 )
 
