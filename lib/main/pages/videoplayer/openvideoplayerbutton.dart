@@ -13,7 +13,7 @@ class OpenVideoPlayerButton extends StatelessWidget {
   void openPlayer(BuildContext context) async {
     final FilePickerResult? result = await FilePicker.platform.pickFiles(
         allowedExtensions: ["mp4", "mkv", "webm", "avi", "mov", "flv"],
-        type: FileType.video);
+        type: FileType.custom);
 
     if (result != null) {
       //Open the video player in a new page
