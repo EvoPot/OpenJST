@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'videoplayerlayer.dart';
 import 'package:file_picker/file_picker.dart';
+import 'playercontrollayer.dart';
+import 'pausebutton/pausebutton.dart';
 
 class Player extends StatefulWidget {
   const Player({super.key});
@@ -14,6 +16,7 @@ class _PlayerState extends State<Player> {
 
   late String videoPath = '';
   bool controlVisibility = false;
+  bool isPlaying = true;
 
   @override
   void initState(){
@@ -44,11 +47,26 @@ class _PlayerState extends State<Player> {
     }
   }
 
+  void changeControlVisibility(){
+    setState(() {
+      controlVisibility = !controlVisibility;   
+    });
+  }
+
+  void pausePlayVideo(){
+    setState(() {
+      isPlaying != isPlaying;
+    });
+
+  }
+
   @override
   Widget build(BuildContext context) {
     return videoPath != '' ? Stack(
       children: [
-        VideoPlayerLayer(file: videoPath)
+        VideoPlayerLayer(file: videoPath),
+        PauseButton(onPressedFunction: pausePlayVideo, isPlaying: isPlaying),
+        PlayerControlLayer(onTapFunction: changeControlVisibility)
       ],
     ) : Text('the player is waiting for a video...');
     //TODO: design a page instead of returning a text
