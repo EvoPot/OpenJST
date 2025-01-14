@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:openjst/main/ojst-ffmpeg/functions/extractvideosubs.dart';
 import 'videoplayerlayer.dart';
 import 'package:file_picker/file_picker.dart';
 import 'playercontrollayer.dart';
@@ -8,6 +9,7 @@ import 'pausebutton/pausebutton.dart';
 import 'package:flutter_vlc_player/flutter_vlc_player.dart';
 import 'controlbar/controlbar.dart';
 import 'subtitlelayer.dart';
+import '../../../ojst-ffmpeg/ojst-ffmpeg.dart';
 
 class Player extends StatefulWidget {
   const Player({super.key});
@@ -20,6 +22,7 @@ class _PlayerState extends State<Player> {
 
 
   late String videoPath = '';
+  String playingSubsDir = '';
   bool controlVisibility = false;
   bool isPlaying = true;
   VlcPlayerController? _videoPlayerController;
@@ -49,8 +52,9 @@ class _PlayerState extends State<Player> {
       final filePath = result.files.single.path;
     
       if (filePath != null) {
+        String subsDir = await ExtractVideoSubs(filePath);
         setState(() {
-
+          playingSubsDir = subsDir;
           videoPath = filePath; //If it ain't broken dont fix it buddyy
           _videoPlayerController = VlcPlayerController.file(File(videoPath));
           
@@ -91,7 +95,7 @@ class _PlayerState extends State<Player> {
     return videoPath.isNotEmpty && _videoPlayerController != null ? Stack(
       children: [
         VideoPlayerLayer(controller: _videoPlayerController!,),
-        SubtitleLayer(controller: _videoPlayerController!),
+        SubtitleLayer(controller: _videoPlayerController!, subsDir: playingSubsDir,),
         PlayerControlLayer(onTapFunction: changeControlVisibility),
         PauseButton(onPressedFunction: pausePlayVideo, isPlaying: isPlaying, isVisible: controlVisibility,),
         ControlBar(

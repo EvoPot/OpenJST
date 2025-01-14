@@ -4,8 +4,9 @@ import 'package:subtitle/subtitle.dart';
 
 
 class SubtitleLayer extends StatefulWidget {
+  final String subsDir;
   final VlcPlayerController controller;
-  const SubtitleLayer({super.key, required this.controller});
+  const SubtitleLayer({super.key, required this.controller, required this.subsDir});
 
   @override
   State<SubtitleLayer> createState() => _SubtitleLayerState();
@@ -19,7 +20,7 @@ class _SubtitleLayerState extends State<SubtitleLayer> {
     // TODO: implement initState
     super.initState();
     subtitles = widget.controller.value.duration;
-    print('micheal $subtitles');
+    print('micheal $widget.subsDir');
     
 
   }
