@@ -7,6 +7,7 @@ import 'playercontrollayer.dart';
 import 'pausebutton/pausebutton.dart';
 import 'package:flutter_vlc_player/flutter_vlc_player.dart';
 import 'controlbar/controlbar.dart';
+import 'subtitlelayer.dart';
 
 class Player extends StatefulWidget {
   const Player({super.key});
@@ -26,7 +27,7 @@ class _PlayerState extends State<Player> {
   @override
   void initState(){
     super.initState();
-    getVideoPath();
+    getVideoPath(); //Get the video path when the player starts
 
   }
 
@@ -64,7 +65,7 @@ class _PlayerState extends State<Player> {
 
   void changeControlVisibility(){
     setState(() {
-      controlVisibility = !controlVisibility;   
+      controlVisibility = !controlVisibility;   //self explanatory ig
     });
   }
 
@@ -90,6 +91,7 @@ class _PlayerState extends State<Player> {
     return videoPath.isNotEmpty && _videoPlayerController != null ? Stack(
       children: [
         VideoPlayerLayer(controller: _videoPlayerController!,),
+        SubtitleLayer(controller: _videoPlayerController!),
         PlayerControlLayer(onTapFunction: changeControlVisibility),
         PauseButton(onPressedFunction: pausePlayVideo, isPlaying: isPlaying, isVisible: controlVisibility,),
         ControlBar(
@@ -97,7 +99,6 @@ class _PlayerState extends State<Player> {
           isVisible: controlVisibility,
           onSliderChange: (p0) {
             print('p0 $p0');
-
               _videoPlayerController!.seekTo(Duration(milliseconds: p0));
 
           } ,),

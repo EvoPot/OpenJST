@@ -12,9 +12,9 @@ import 'package:flutter_vlc_player/flutter_vlc_player.dart';
 
 class Bar extends StatelessWidget {
   final String durationText;
-  final VlcPlayerController controller;
+  final VlcPlayerValue value;
   final Function(int) onSliderChange;
-  const Bar({super.key, required this.durationText, required this.controller, required this.onSliderChange});
+  const Bar({super.key, required this.durationText, required this.value, required this.onSliderChange});
 
   @override
   Widget build(BuildContext context) {
@@ -45,8 +45,8 @@ class Bar extends StatelessWidget {
                   height: 6,
                   child: Slider(
                     min: 0.0,
-                    max: controller.value.duration.inMilliseconds.toDouble(),
-                    value: controller.value.position.inMilliseconds.toDouble(),
+                    max: value.duration.inMilliseconds.toDouble(),
+                    value: value.position.inMilliseconds.toDouble(),
                     onChanged: (double newValue){
                       onSliderChange(newValue.toInt());
                       

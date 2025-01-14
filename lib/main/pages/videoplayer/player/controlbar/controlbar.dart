@@ -62,7 +62,7 @@ class _ControlBarState extends State<ControlBar> {
           Bar(
             durationText: '${durationText}/${positionText}',
 
-          controller: widget.controller,
+          value: widget.controller.value,
           onSliderChange: (val) => widget.onSliderChange(val)),
       ],
     ),);
