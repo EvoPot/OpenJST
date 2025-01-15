@@ -45,6 +45,7 @@ class SubtitleLayerState extends State<SubtitleLayer> {
   }
 
   Future<void> updateSubtitles(String newSubs) async {
+    print("today were cooking $newSubs");
     if(await File(newSubs).exists()){
       print('they really did exist');
       setState(() {

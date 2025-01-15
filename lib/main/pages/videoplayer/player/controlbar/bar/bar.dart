@@ -9,6 +9,7 @@ Well I don't know if this will help anyone but there you go buddy
 
 import 'package:flutter/material.dart';
 import 'package:flutter_vlc_player/flutter_vlc_player.dart';
+import 'package:openjst/main/pages/videoplayer/player/controlbar/bar/videooptions/optionbutton.dart';
 
 class Bar extends StatelessWidget {
   final String durationText;
@@ -30,7 +31,6 @@ class Bar extends StatelessWidget {
                 ),
             ),
             Expanded(
-              flex:10,
               child: Container(
                 color: Colors.black,
                 height: 6,
@@ -44,7 +44,9 @@ class Bar extends StatelessWidget {
                   }
                   ),
                 )
-                )
+                ),
+            OptionButton()
+            
           ],
         ),
       ),
