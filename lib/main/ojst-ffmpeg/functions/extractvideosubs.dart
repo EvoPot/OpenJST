@@ -19,6 +19,7 @@ Future<String> ExtractVideoSubs(String videoDir) async{
   }
 
   FFmpegKit.execute("ffmpeg -i $videoDir -map 0:s -c:s srt $extractingDir/subtitle_%d.srt");
+  print('extractingDir $extractingDir');
   return extractingDir;
   
 }
