@@ -20,6 +20,8 @@ class Player extends StatefulWidget {
 
 class _PlayerState extends State<Player> {
 
+  final GlobalKey<SubtitleLayerState> subtitleKey = GlobalKey<SubtitleLayerState>();
+
 
   late String videoPath = '';
   String playingSubsDir = '';
@@ -52,9 +54,11 @@ class _PlayerState extends State<Player> {
       final filePath = result.files.single.path;
     
       if (filePath != null) {
-        String subsDir = await ExtractVideoSubs(filePath);
+
+        String subsDir = await ExtractVideoSubs(filePath); // Extracts the already existing subtitles in the video file as srt, and then returns the directory of the subs
+
+        subtitleKey.currentState?.updateSubtitles('$subsDir/subtitle1'); //Update the subtitles in the subtitles widget
         setState(() {
-          playingSubsDir = subsDir;
           videoPath = filePath; //If it ain't broken dont fix it buddyy
           _videoPlayerController = VlcPlayerController.file(File(videoPath));
           
@@ -92,24 +96,26 @@ class _PlayerState extends State<Player> {
 
   @override
   Widget build(BuildContext context) {
-    return videoPath.isNotEmpty && _videoPlayerController != null ? Stack(
-      children: [
-        VideoPlayerLayer(controller: _videoPlayerController!,),
-        SubtitleLayer(controller: _videoPlayerController!, subsDir: playingSubsDir,),
-        PlayerControlLayer(onTapFunction: changeControlVisibility),
-        PauseButton(onPressedFunction: pausePlayVideo, isPlaying: isPlaying, isVisible: controlVisibility,),
-        ControlBar(
-          controller: _videoPlayerController!,
-          isVisible: controlVisibility,
-          onSliderChange: (p0) {
-            print('p0 $p0');
-              _videoPlayerController!.seekTo(Duration(milliseconds: p0));
-
-          } ,),
-        if(!controlVisibility)PlayerControlLayer(onTapFunction: changeControlVisibility)
-
-      ],
-    ) : Text('the player is waiting for a video...');
+    return Scaffold(
+      body: Stack(
+        children: [
+          VideoPlayerLayer(controller: _videoPlayerController,),
+          SubtitleLayer(controller: _videoPlayerController,key: subtitleKey,),
+          PlayerControlLayer(onTapFunction: changeControlVisibility),
+          PauseButton(onPressedFunction: pausePlayVideo, isPlaying: isPlaying, isVisible: controlVisibility,),
+          ControlBar(
+            controller: _videoPlayerController,
+            isVisible: controlVisibility,
+            onSliderChange: (p0) {
+              print('p0 $p0');
+                _videoPlayerController!.seekTo(Duration(milliseconds: p0));
+      
+            } ,),
+          if(!controlVisibility)PlayerControlLayer(onTapFunction: changeControlVisibility)
+      
+        ],
+      ),
+    );
     //TODO: design a page instead of returning a text
   }
 }

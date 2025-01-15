@@ -6,7 +6,7 @@ import 'package:media_kit_video/media_kit_video_controls/src/controls/methods/vi
 import 'package:openjst/main/pages/videoplayer/player/controlbar/bar/bar.dart';
 
 class ControlBar extends StatefulWidget {
-  final VlcPlayerController controller; // This is so that it can have the same values as the other widgets.
+  final VlcPlayerController? controller; // This is so that it can have the same values as the other widgets.
   final bool isVisible;
   final Function(int) onSliderChange;
   const ControlBar({super.key, required this.controller, required this.isVisible, required this.onSliderChange});
@@ -43,8 +43,12 @@ class _ControlBarState extends State<ControlBar> {
     //Update the text on the control bar every 100 milliseconds
     _timer = Timer.periodic(Duration(milliseconds: 100), (Timer){
       setState(() {
-        durationText = _formatDuration(widget.controller.value.duration);
-        positionText = _formatDuration(widget.controller.value.position);
+        if(widget.controller != null){
+
+          durationText = _formatDuration(widget.controller!.value.duration);
+          positionText = _formatDuration(widget.controller!.value.position);
+
+        }
         
       });
     });
@@ -53,19 +57,23 @@ class _ControlBarState extends State<ControlBar> {
 
   @override
   Widget build(BuildContext context) {
-    return AnimatedOpacity(
-      opacity: widget.isVisible ? 1.0 : 0,
-       duration: Duration(milliseconds: 300),
-       child: Column(
+    if(widget.controller != null){
+      return AnimatedOpacity(
+        opacity: widget.isVisible ? 1.0 : 0,
+        duration: Duration(milliseconds: 300),
+        child: Column(
         children: [
           Expanded(child: SizedBox.expand()), // Makes sure the bar is at the bottom of the screen
           Bar(
             durationText: '${durationText}/${positionText}',
 
-          value: widget.controller.value,
+          value: widget.controller!.value,
           onSliderChange: (val) => widget.onSliderChange(val)),
       ],
     ),);
+
+    } else return SizedBox.shrink();
+    
     //return Text('${durationText}/${positionText}');
   }
 }

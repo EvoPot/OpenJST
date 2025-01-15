@@ -10,16 +10,20 @@ This function gets a path to a video file, extracts the subtitle tracks in the v
 */
 
 Future<String> ExtractVideoSubs(String videoDir) async{
-  final tempDir = await getTemporaryDirectory();
-  final extractingDir = "${tempDir.path}/${randomString(8)}";
+
+
+  final tempDir = await getDownloadsDirectory();
+  
+  final extractingDir = "${tempDir?.path}/${randomString(8)}";
 
   final dir = Directory(extractingDir);
   if(!await dir.exists()){
     await dir.create(recursive: true);
   }
-
-  FFmpegKit.execute("ffmpeg -i $videoDir -map 0:s -c:s srt $extractingDir/subtitle_%d.srt");
-  print('extractingDir $extractingDir');
-  return extractingDir;
   
+  final command = 'ffmpeg -i "$videoDir" -map 0:s -c:s srt "$extractingDir/subtitle_%d.srt"';
+
+  await FFmpegKit.execute(command);
+
+  return extractingDir;
 }
