@@ -23,37 +23,27 @@ class Bar extends StatelessWidget {
         padding: const EdgeInsets.only(bottom: 40.0),
         child: Row(
           children: [
-            Expanded(
-              flex: 3,
-              child: Material(
-                color: Colors.black,
-                
-                child: Center(
-                  child: Text(
-                    durationText,
-                    style: TextStyle(color: Colors.white,fontSize: 10),
-                    ),
+            Center(
+              child: Text(
+                durationText,
+                style: TextStyle(color: Colors.white,fontSize: 10),
                 ),
-              )
-              ),
+            ),
             Expanded(
               flex:10,
-              child: Material(
+              child: Container(
                 color: Colors.black,
-                child: Container(
-                  color: Colors.black,
-                  height: 6,
-                  child: Slider(
-                    min: 0.0,
-                    max: value.duration.inMilliseconds.toDouble(),
-                    value: value.position.inMilliseconds.toDouble(),
-                    onChanged: (double newValue){
-                      onSliderChange(newValue.toInt());
-                      
-                    }
-                    ),
+                height: 6,
+                child: Slider(
+                  min: 0.0,
+                  max: value.duration.inMilliseconds.toDouble(),
+                  value: value.position.inMilliseconds.toDouble(),
+                  onChanged: (double newValue){
+                    onSliderChange(newValue.toInt());
+                    
+                  }
                   ),
-              )
+                )
                 )
           ],
         ),

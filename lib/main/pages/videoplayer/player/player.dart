@@ -97,6 +97,7 @@ class _PlayerState extends State<Player> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.black,
       body: Stack(
         children: [
           VideoPlayerLayer(controller: _videoPlayerController,),
