@@ -52,10 +52,17 @@ class SubtitleLayerState extends State<SubtitleLayer> {
   Widget build(BuildContext context) {
     if(widget.controller != null){
 
-      return SelectableSubtitle(
-        text: subtitleText,
-        textOutputFunction: (h) => print("lambda owo")
-        );
+      return Column(
+        children: [
+          Expanded(child: SizedBox.expand(),flex: 3,),
+          Expanded(
+            child: SelectableSubtitle(
+              text: subtitleText,
+              textOutputFunction: (h) => print("lambda owo")
+              ),
+          ),
+        ],
+      );
 
     } else {
       return SizedBox.shrink();

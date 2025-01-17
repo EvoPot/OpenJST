@@ -39,6 +39,11 @@ class _ControlBarState extends State<ControlBar> {
 
   }
 
+  @override
+  void dispose(){
+    _timer?.cancel();
+  }
+
   void startTimer(){
     //Update the text on the control bar every 100 milliseconds
     _timer = Timer.periodic(Duration(milliseconds: 100), (Timer){
@@ -76,4 +81,8 @@ class _ControlBarState extends State<ControlBar> {
     
     //return Text('${durationText}/${positionText}');
   }
+}
+
+extension on Timer? {
+  void dispose() {}
 }
