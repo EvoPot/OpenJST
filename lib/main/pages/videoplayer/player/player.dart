@@ -2,6 +2,8 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:openjst/main/ojst-ffmpeg/functions/extractvideosubs.dart';
+import 'package:openjst/main/pages/videoplayer/playerprovider.dart';
+import 'package:provider/provider.dart';
 import 'videoplayerlayer.dart';
 import 'package:file_picker/file_picker.dart';
 import 'playercontrollayer.dart';
@@ -54,10 +56,11 @@ class _PlayerState extends State<Player> {
       final filePath = result.files.single.path;
     
       if (filePath != null) {
+        final playerProvider = Provider.of<PlayerProvider>(context, listen: false);
 
         String subsDir = await ExtractVideoSubs(filePath); // Extracts the already existing subtitles in the video file as srt, and then returns the directory of the subs
 
-        subtitleKey.currentState?.updateSubtitles('$subsDir/subtitle1'); //Update the subtitles in the subtitles widget
+        playerProvider.updateSubtitles(subsDir); //Update the subtitles in the subtitles widget
         setState(() {
           videoPath = filePath; //If it ain't broken dont fix it buddyy
           _videoPlayerController = VlcPlayerController.file(File(videoPath));
@@ -101,7 +104,11 @@ class _PlayerState extends State<Player> {
       body: Stack(
         children: [
           VideoPlayerLayer(controller: _videoPlayerController,),
-          SubtitleLayer(controller: _videoPlayerController,key: subtitleKey,),
+          Consumer<PlayerProvider>(builder: (context,value,child){
+            return SubtitleLayer(controller: _videoPlayerController,subControl: value.subControl,);
+          }
+          )
+          ,
           PlayerControlLayer(onTapFunction: changeControlVisibility),
           PauseButton(onPressedFunction: pausePlayVideo, isPlaying: isPlaying, isVisible: controlVisibility,),
           ControlBar(

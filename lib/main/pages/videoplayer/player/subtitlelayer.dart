@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:convert';
 import 'dart:io';
 
 import 'package:flutter/material.dart';
@@ -10,7 +11,8 @@ import '../../../text/selectablesubtitle.dart';
 
 class SubtitleLayer extends StatefulWidget {
   final VlcPlayerController? controller;
-  const SubtitleLayer({super.key, required this.controller});
+  final SubtitleController? subControl;
+  const SubtitleLayer({super.key, required this.controller, required this.subControl});
 
   @override
   State<SubtitleLayer> createState() => SubtitleLayerState();
@@ -20,7 +22,7 @@ class SubtitleLayerState extends State<SubtitleLayer> {
   Timer? _timer;
   File? subtitles;
   SubtitleController? subControl;
-  String subtitleText = "snake owo";
+  String subtitleText = "";
 
   @override
   void initState() {
@@ -34,9 +36,14 @@ class SubtitleLayerState extends State<SubtitleLayer> {
     _timer = Timer.periodic(Duration(milliseconds: 100), (Timer){
       setState(() {
         try{
-          subtitleText = subControl!.durationSearch(widget.controller!.value.duration).toString();
+          subtitleText = widget.subControl!.durationSearch(widget.controller!.value.duration)!.data;
         }catch (e){
-          print("sorry man therres an error $e");
+          if(widget.subControl != null){
+
+            print(widget.subControl!.provider.toString() + "ninini");
+
+          }
+          print("sorry man therres an error $e ninini");
         }
         
       });
@@ -44,22 +51,6 @@ class SubtitleLayerState extends State<SubtitleLayer> {
 
   }
 
-  Future<void> updateSubtitles(String newSubs) async {
-    print("today were cooking $newSubs");
-    if(await File(newSubs).exists()){
-      print('they really did exist');
-      setState(() {
-
-        subtitles = File(newSubs);
-        subControl = SubtitleController(
-          provider: SubtitleProvider.fromFile(subtitles!)
-          );
-        
-      });
-    } else {
-      print('subtitles didnt exist');
-    }
-  }
 
   @override
   Widget build(BuildContext context) {

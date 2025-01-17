@@ -54,6 +54,7 @@ dependencies:
   media_kit_libs_video: ^1.0.5
   subtitle: ^0.1.0-beta.3
   ffmpeg_kit_flutter: ^6.0.3
+  flutter_subtitle: ^0.0.5
 
 dev_dependencies:
   analyzer : ^5.13.0

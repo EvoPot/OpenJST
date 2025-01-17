@@ -24,6 +24,7 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await DictionaryOperations.initialize();
   runApp(ChangeNotifierProvider(
+    //TODO: get rid of not ideal provider
       create: (_) => ProgressProvider(), child: HomePage()));
 }
 

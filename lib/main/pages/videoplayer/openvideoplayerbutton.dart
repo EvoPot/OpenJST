@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'player/player.dart';
 import '../../appstyle/colors.dart';
 import 'package:file_picker/file_picker.dart';
+import 'playerprovider.dart';
+import 'package:provider/provider.dart';
 
 class OpenVideoPlayerButton extends StatelessWidget {
   final String text;
@@ -15,7 +17,7 @@ class OpenVideoPlayerButton extends StatelessWidget {
         Navigator.push(
             context,
             MaterialPageRoute(
-                builder: (context) => Player()));
+                builder: (context) => ProvidingPlayer()));
   }
 
   @override
@@ -26,5 +28,14 @@ class OpenVideoPlayerButton extends StatelessWidget {
             foregroundColor: WidgetStateProperty.all(colors.mainAccentColor)),
         onPressed: () => openPlayer(context),
         child: Text(text));
+  }
+}
+
+class ProvidingPlayer extends StatelessWidget {
+  const ProvidingPlayer({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return ChangeNotifierProvider(create: (context) => PlayerProvider(), child: Player(),);
   }
 }

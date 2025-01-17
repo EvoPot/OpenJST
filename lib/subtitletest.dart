@@ -1,4 +1,8 @@
+import 'dart:io';
+
+import 'package:file_picker/file_picker.dart';
 import 'package:subtitle/subtitle.dart';
+
 
 const vttData = '''WEBVTT FILE
 
@@ -36,15 +40,19 @@ UPC
 Simply for <u>everyone</u>''';
 
 void main(List<String> args) async {
+  FilePickerResult? result = await FilePicker.platform.pickFiles();
+  late String filepath;
+
+  if (result != null){
+    filepath = result.files.single.path!;
+
+  }
   //! By using controller
   var controller = SubtitleController(
-      provider: SubtitleProvider.fromString(
-    data: vttData,
-    type: SubtitleType.vtt,
-  ));
+      provider: SubtitleProvider.fromFile(File(filepath)));
 
   await controller.initial();
-  print(controller.durationSearch(Duration(seconds: 27)));
+  print(controller.subtitles);
 }
 
 void printResult(List<Subtitle> subtitles) {

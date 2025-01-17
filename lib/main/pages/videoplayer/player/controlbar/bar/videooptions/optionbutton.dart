@@ -5,15 +5,21 @@ The button that shows the video options menu
 import 'package:flutter/material.dart';
 import 'changevideosubtitle.dart';
 import '../../../../../../appstyle/colors.dart';
+import 'package:provider/provider.dart';
+import '../../../../playerprovider.dart';
 
 class OptionButton extends StatelessWidget {
   const OptionButton({super.key});
 
+  
+
   void showVideoOptions(BuildContext context){
+
+    final playerProvider = Provider.of<PlayerProvider>(context,listen: false);
 
     List<Widget> optionsList = 
     [
-      ChangeVideoSubtitle(),
+      ChangeVideoSubtitle(provider: playerProvider,),
     ];
     showDialog(
       context: context,
@@ -28,7 +34,7 @@ class OptionButton extends StatelessWidget {
             ),
           ),
           
-
+        
         );
       }
       );
