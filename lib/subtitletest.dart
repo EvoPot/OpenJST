@@ -45,6 +45,7 @@ void main(List<String> args) async {
 
   if (result != null){
     filepath = result.files.single.path!;
+    print(filepath);
 
   }
   //! By using controller
