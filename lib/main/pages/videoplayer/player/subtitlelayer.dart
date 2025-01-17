@@ -5,7 +5,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_vlc_player/flutter_vlc_player.dart';
 import 'package:openjst/subtitletest.dart';
-import 'package:subtitle/subtitle.dart';
+import 'package:flutter_subtitle/flutter_subtitle.dart';
 import '../../../text/selectablesubtitle.dart';
 
 
@@ -36,13 +36,9 @@ class SubtitleLayerState extends State<SubtitleLayer> {
     _timer = Timer.periodic(Duration(milliseconds: 100), (Timer){
       setState(() {
         try{
-          subtitleText = widget.subControl!.durationSearch(widget.controller!.value.duration)!.data;
+          subtitleText = widget.subControl!.textFromMilliseconds(widget.controller!.value.position.inMilliseconds, widget.subControl!.subtitles);
+          print('subtext $subtitleText');
         }catch (e){
-          if(widget.subControl != null){
-
-            print(widget.subControl!.provider.toString() + "ninini");
-
-          }
           print("sorry man therres an error $e ninini");
         }
         

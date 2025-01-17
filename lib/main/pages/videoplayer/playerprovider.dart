@@ -4,7 +4,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_vlc_player/flutter_vlc_player.dart';
-import 'package:subtitle/subtitle.dart';
+import 'package:flutter_subtitle/flutter_subtitle.dart';
 
 import 'player/subtitlelayer.dart';
 
@@ -14,9 +14,9 @@ class PlayerProvider extends ChangeNotifier{
 
   void updateSubtitles(String newSubs) async{
     if(await File(newSubs).exists()){
+      String subsToString = await File(newSubs).readAsString();
 
-      subControl = SubtitleController(provider: FileSubtitle(File(newSubs)));
-      await subControl?.initial();
+      subControl = SubtitleController.string(subsToString, format: SubtitleFormat.srt);
       print(newSubs + "ninini");
       notifyListeners();
 
