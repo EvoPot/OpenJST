@@ -47,6 +47,7 @@ class _ControlBarState extends State<ControlBar> {
   void startTimer(){
     //Update the text on the control bar every 100 milliseconds
     _timer = Timer.periodic(Duration(milliseconds: 100), (Timer){
+      //rebuild the widget every 100 ms
       setState(() {
         if(widget.controller != null){
 
@@ -81,8 +82,4 @@ class _ControlBarState extends State<ControlBar> {
     
     //return Text('${durationText}/${positionText}');
   }
-}
-
-extension on Timer? {
-  void dispose() {}
 }

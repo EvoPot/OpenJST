@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'dart:convert';
 import 'dart:io';
 
 import 'package:flutter/material.dart';
@@ -31,8 +30,13 @@ class SubtitleLayerState extends State<SubtitleLayer> {
     startTimer();
   }
 
+  @override
+  void dispose(){
+    _timer?.cancel();
+  }
+
   void startTimer(){
-    //Update the text on the control bar every 100 milliseconds
+    //Update the subtitles every 100 milliseconds
     _timer = Timer.periodic(Duration(milliseconds: 100), (Timer){
       setState(() {
         try{
