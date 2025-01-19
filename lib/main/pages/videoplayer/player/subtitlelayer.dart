@@ -6,6 +6,8 @@ import 'package:flutter_vlc_player/flutter_vlc_player.dart';
 import 'package:openjst/subtitletest.dart';
 import 'package:flutter_subtitle/flutter_subtitle.dart';
 import '../../../text/selectablesubtitle.dart';
+import '../../../dictionary/operations.dart';
+import '../../../dictionary/resultlist.dart';
 
 
 class SubtitleLayer extends StatefulWidget {
@@ -48,6 +50,23 @@ class SubtitleLayerState extends State<SubtitleLayer> {
         
       });
     });
+
+  }
+
+  Future<void> ShowMeanings(String search, BuildContext context) async {
+
+    List<List<dynamic>> searchResult = await DictionaryOperations().searchWords(search);
+
+    showDialog(
+      context: context,
+      builder: (BuildContext context){
+        return AlertDialog(
+          title: Text('search results for $search'),
+          content: ResultList(input: searchResult),
+
+        );
+      }
+      );
 
   }
 
