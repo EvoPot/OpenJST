@@ -4,13 +4,17 @@ import 'package:flutter/material.dart';
 
 class ResultList extends StatelessWidget {
   final List<List<dynamic>> input;
-  const ResultList({super.key, required this.input});
+  ResultList({super.key, required this.input});
+
+
+  
 
   @override
   Widget build(BuildContext context) {
-    return ListView.builder(itemBuilder: (BuildContext context, int index){
-      return Structuredcontent(structure: input[index]);
-    }
+    return SizedBox(
+      width: double.maxFinite,
+      child: ListView(
+        children: List.generate(input.length, (int index) => Structuredcontent(structure: input[index])),
+      ),
     );
-  }
-}
+}}

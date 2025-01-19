@@ -8,8 +8,8 @@ import 'package:file_picker/file_picker.dart';
 import 'package:provider/provider.dart';
 import 'dart:convert';
 import 'package:path/path.dart' as p;
-import 'operations.dart';
-import '../appstyle/colors.dart';
+import '../operations.dart';
+import '../../appstyle/colors.dart';
 
 //hello from the main pc
 

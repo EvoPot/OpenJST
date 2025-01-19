@@ -31,10 +31,22 @@ class DictionaryOperations {
   }
 
   // read operations
+  Future<List<int>> getAllDictionaries() async{
+    final processing = await isar.dicts.where().findAll();
+
+    List<int> result = [];
+
+    for(Dict i in processing){
+      result.add(i.id);
+
+    }
+
+    return result;
+  }
 
   Future<List<List<dynamic>>> searchWords(String searchterm) async {
     final processing =
-        await isar.words.filter().surfaceContains(searchterm).findAll();
+        await isar.words.filter().surfaceContains(searchterm).offset(0).limit(20).findAll();
 
     List<List<dynamic>> result = [];
 

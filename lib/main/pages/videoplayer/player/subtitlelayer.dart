@@ -45,7 +45,7 @@ class SubtitleLayerState extends State<SubtitleLayer> {
   }
 
   void initializeMecab() async{
-    await tagger.init("assets/ipadic", false);
+    await tagger.init("assets/mecab-dictionary/ipadic", false);
   }
 
   void startTimer(){
@@ -88,7 +88,7 @@ class SubtitleLayerState extends State<SubtitleLayer> {
       builder: (BuildContext context){
         return AlertDialog(
           title: Text('search results for $search'),
-          content: ResultList(input: searchResult),
+          content: Container(height:500, child: ResultList(input: searchResult)),
 
         );
       }
