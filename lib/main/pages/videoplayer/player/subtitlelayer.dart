@@ -8,6 +8,7 @@ import 'package:flutter_subtitle/flutter_subtitle.dart';
 import '../../../text/selectablesubtitle.dart';
 import '../../../dictionary/operations.dart';
 import '../../../dictionary/resultlist.dart';
+import 'package:mecab_dart/mecab_dart.dart';
 
 
 class SubtitleLayer extends StatefulWidget {
@@ -24,17 +25,27 @@ class SubtitleLayerState extends State<SubtitleLayer> {
   File? subtitles;
   SubtitleController? subControl;
   String subtitleText = "";
+  Mecab tagger = new Mecab();
 
   @override
   void initState() {
+
+    
     // TODO: implement initState
     super.initState();
     startTimer();
+    initializeMecab();
   }
 
   @override
   void dispose(){
+    
+    super.dispose();
     _timer?.cancel();
+  }
+
+  void initializeMecab() async{
+    await tagger.init("assets/ipadic", false);
   }
 
   void startTimer(){
@@ -54,10 +65,25 @@ class SubtitleLayerState extends State<SubtitleLayer> {
   }
 
   Future<void> ShowMeanings(String search, BuildContext context) async {
+    print("searching for $search");
 
     List<List<dynamic>> searchResult = await DictionaryOperations().searchWords(search);
 
-    showDialog(
+    if(searchResult.isEmpty){
+      showDialog(
+      context: context,
+      builder: (BuildContext context){
+        return AlertDialog(
+          title: Text('No results found'),
+          content: Text('No results have been found for $search. Try installing a dictionary, or searching for a new word.')
+
+        );
+      }
+      );
+
+    } else {
+
+      showDialog(
       context: context,
       builder: (BuildContext context){
         return AlertDialog(
@@ -67,6 +93,10 @@ class SubtitleLayerState extends State<SubtitleLayer> {
         );
       }
       );
+
+    }
+
+    
 
   }
 
@@ -80,8 +110,10 @@ class SubtitleLayerState extends State<SubtitleLayer> {
           Expanded(child: SizedBox.expand(),flex: 3,),
           Expanded(
             child: SelectableSubtitle(
-              text: subtitleText,
-              textOutputFunction: (h) => print("lambda owo")
+              onTapFunction: (h) async{
+                ShowMeanings(h, context);
+              },
+              mecabTokens: tagger.parse(subtitleText)
               ),
           ),
         ],
