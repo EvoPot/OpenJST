@@ -22,7 +22,7 @@ class SelectableTextTile extends StatelessWidget {
         },
         child: StrokeText(
           text: tileText.surface,
-          textStyle: expectedValue.isEven ? TextStyle(fontSize: 20, color: Colors.white) : TextStyle(fontSize: 20, color: Colors.blue),
+          textStyle: TextStyle(fontSize: 20, color: Colors.white),
           strokeColor: Colors.black,
           strokeWidth: 5,
         ));
