@@ -23,7 +23,7 @@ The first beta build is planned to support:
 
 The first release is planned to release when you can actually export cards to Anki, and is planned to release in about idk 3 months?? lol
 
-If you are interested in using this app, please do make sure to report any problems you find with the app in the Issues section, or heck, you can even contribute.
+If you are interested in using this app, please do make sure to report any problems you find with the app in the Issues section, or heck, you can even contribute code.
 
 Alright thats it I guess see you for the next readme update
 
