@@ -104,11 +104,8 @@ class _PlayerState extends State<Player> {
       body: Stack(
         children: [
           VideoPlayerLayer(controller: _videoPlayerController,),
-          Consumer<PlayerProvider>(builder: (context,value,child){
-            return SubtitleLayer(controller: _videoPlayerController,subControl: value.subControl,);
-          }
-          )
-          ,
+          
+          
           PlayerControlLayer(onTapFunction: changeControlVisibility),
           PauseButton(onPressedFunction: pausePlayVideo, isPlaying: isPlaying, isVisible: controlVisibility,),
           ControlBar(
@@ -119,7 +116,11 @@ class _PlayerState extends State<Player> {
                 _videoPlayerController!.seekTo(Duration(milliseconds: p0));
       
             } ,),
-          if(!controlVisibility)PlayerControlLayer(onTapFunction: changeControlVisibility)
+          if(!controlVisibility)PlayerControlLayer(onTapFunction: changeControlVisibility),
+          Consumer<PlayerProvider>(builder: (context,value,child){
+            return SubtitleLayer(controller: _videoPlayerController,subControl: value.subControl,);
+          }
+          )
       
         ],
       ),

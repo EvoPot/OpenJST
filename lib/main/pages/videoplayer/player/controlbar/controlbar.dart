@@ -41,6 +41,7 @@ class _ControlBarState extends State<ControlBar> {
 
   @override
   void dispose(){
+    super.dispose();
     _timer?.cancel();
   }
 

@@ -13,7 +13,13 @@ class SelectableSubtitle extends StatelessWidget {
       children: List.generate(
         mecabTokens.length,
         (int item){
-          return SelectableTextTile(expectedValue: item, onTapFunction: onTapFunction(mecabTokens[item].surface), tileText: mecabTokens[item]);
+          return SelectableTextTile(
+            expectedValue: item,
+            onTapFunction: (h) {
+              print("the surface is ${mecabTokens[h].surface}");
+              onTapFunction(mecabTokens[h].surface);  
+            },
+            tileText: mecabTokens[item]);
         }
         )
       

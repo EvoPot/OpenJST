@@ -15,10 +15,14 @@ class SelectableTextTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-        onTap: () => onTapFunction(expectedValue),
+        onTap: (){
+          print("i got pressed!");
+          onTapFunction(expectedValue);
+
+        },
         child: StrokeText(
           text: tileText.surface,
-          textStyle: const TextStyle(fontSize: 20, color: Colors.white),
+          textStyle: expectedValue.isEven ? TextStyle(fontSize: 20, color: Colors.white) : TextStyle(fontSize: 20, color: Colors.blue),
           strokeColor: Colors.black,
           strokeWidth: 5,
         ));

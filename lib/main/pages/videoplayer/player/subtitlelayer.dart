@@ -111,7 +111,7 @@ class SubtitleLayerState extends State<SubtitleLayer> {
           Expanded(
             child: SelectableSubtitle(
               onTapFunction: (h) async{
-                ShowMeanings(h, context);
+                await ShowMeanings(h, context);
               },
               mecabTokens: tagger.parse(subtitleText)
               ),
