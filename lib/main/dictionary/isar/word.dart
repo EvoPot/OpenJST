@@ -7,7 +7,11 @@ part 'word.g.dart';
 class Word{
   Id id = Isar.autoIncrement;
 
-  String? surface;
+  String? word; //The word itself
+
+  String? reading; //The hiragana reading of the word
+
+  String? surface; // The JSON that contains the stuff like the word structure
 
   int? dictionaryId;
 
