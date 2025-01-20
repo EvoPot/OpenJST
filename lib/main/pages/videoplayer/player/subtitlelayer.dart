@@ -67,7 +67,7 @@ class SubtitleLayerState extends State<SubtitleLayer> {
   Future<void> ShowMeanings(String search, BuildContext context) async {
     print("searching for $search");
 
-    List<List<dynamic>> searchResult = await DictionaryOperations().searchWords(search);
+    List<dynamic> searchResult = await DictionaryOperations().searchWords(search);
 
     if(searchResult.isEmpty){
       showDialog(

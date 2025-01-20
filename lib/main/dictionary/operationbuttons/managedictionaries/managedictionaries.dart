@@ -13,6 +13,8 @@ class ManageDictionariesButton extends StatelessWidget {
   void openManageDictionariesButton(BuildContext context) async {
     List<int> listOfDicts = await DictionaryOperations().getAllDictionaries();
 
+    
+
     List<Widget> dictionaryButtonList = List.generate(
       listOfDicts.length,
       (int i){
@@ -20,14 +22,17 @@ class ManageDictionariesButton extends StatelessWidget {
       }
       );
 
+    if(dictionaryButtonList.isEmpty){
+      dictionaryButtonList.add(Text('There are no dictionaries. Try adding one!'));
+    }
+
     showDialog(
       context: context,
       builder: (context){
         return AlertDialog(
           title: Text('Manage Dictionaries...'),
-          content: Scaffold(
-            body: Column(children: dictionaryButtonList,),
-          ),
+          content: Column(children: dictionaryButtonList,mainAxisSize: MainAxisSize.min,),
+          
           
         );
       }

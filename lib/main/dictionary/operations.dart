@@ -23,8 +23,10 @@ class DictionaryOperations {
     return newDict.id;
   }
 
-  Future<void> addWord(String surface, int dictionaryId) async {
+  Future<void> addWord(String word,String reading,String surface, int dictionaryId) async {
     final newWord = Word()
+      ..word = word
+      ..reading = reading
       ..surface = surface
       ..dictionaryId = dictionaryId;
     await isar.writeTxn(() => isar.words.put(newWord));
@@ -44,19 +46,22 @@ class DictionaryOperations {
     return result;
   }
 
-  Future<List<List<dynamic>>> searchWords(String searchterm) async {
-    final wordContaining = await isar.words.filter().wordContains(searchterm).findAll(); // return words that contain the search term
-
-    final readingContaining = await isar.words.filter().readingContains(searchterm).findAll(); // return readings that contain the search term
-
-    final mergerList = (wordContaining + readingContaining).toSet().toList(); //merge the two lists, delete duplicate words
-
-    List<List<dynamic>> result = [];
-
-    for(Word i in mergerList){
-      final jsonifiedString = jsonDecode(i.surface!); //The surface is JSON stored as string owo
-      result.add(jsonifiedString);
-    }
+  Future<dynamic> searchWords(String searchterm) async {
+    final stopwatch = Stopwatch()..start();
+    print('stopwatch has been started');
+    final wordContaining = await isar.words.filter().wordStartsWith(searchterm).or().readingStartsWith(searchterm).surfaceProperty().findAll(); // return words that contain the search term
+    print('isar filtering operation for $searchterm done in ${stopwatch.elapsedMilliseconds}ms');
+    final result = await Future.wait(
+      wordContaining.map((word) async{
+        if(word != null){
+          return jsonDecode(word);
+        }
+        return [];
+      })
+    );
+    print('json decoding operation for $searchterm done in ${stopwatch.elapsedMilliseconds}ms');
+    stopwatch.stop();
+    print('search operation for $searchterm done in ${stopwatch.elapsedMilliseconds}ms');
 
     return result;
   }
