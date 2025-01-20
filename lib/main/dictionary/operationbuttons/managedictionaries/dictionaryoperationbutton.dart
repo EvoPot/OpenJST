@@ -8,8 +8,8 @@ class DictionaryOperationButton extends StatelessWidget {
 
   DictionaryOperations operations = DictionaryOperations();
 
-  void deleteDictionary(){
-    operations.deleteDictionary(dictionaryManaged);
+  void deleteDictionary() async{
+    await operations.deleteDictionary(dictionaryManaged);
 
   }
 

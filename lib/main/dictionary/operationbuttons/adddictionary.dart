@@ -96,8 +96,9 @@ class AddDictionaryButton extends StatelessWidget {
 
                 if (jsonObject is List && file.name.startsWith("term_bank")) {
                   for (var i in jsonObject) {
+                    //i[0] contains the term, i[1] contains the reading, and surface is a JSON stored as string so we encode i and put it there too
                     await DictionaryOperations()
-                        .addWord(jsonEncode(i), newDictionaryId);
+                        .addWord(i[0],i[1],jsonEncode(i), newDictionaryId);
                   }
                 }
             }
