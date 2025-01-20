@@ -9,6 +9,7 @@ import '../../../text/selectablesubtitle.dart';
 import '../../../dictionary/operations.dart';
 import '../../../dictionary/resultlist.dart';
 import 'package:mecab_dart/mecab_dart.dart';
+import 'resultpage.dart';
 
 
 class SubtitleLayer extends StatefulWidget {
@@ -70,6 +71,10 @@ class SubtitleLayerState extends State<SubtitleLayer> {
     List<dynamic> searchResult = await DictionaryOperations().searchWords(search);
 
     if(searchResult.isEmpty){
+      Navigator.push(
+        context,
+        MaterialPageRoute(builder: (context) => ResultPage(searchResult: searchResult, searchingFor: search,))
+        );
       showDialog(
       context: context,
       builder: (BuildContext context){
