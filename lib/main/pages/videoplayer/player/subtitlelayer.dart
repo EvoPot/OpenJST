@@ -71,10 +71,6 @@ class SubtitleLayerState extends State<SubtitleLayer> {
     List<dynamic> searchResult = await DictionaryOperations().searchWords(search);
 
     if(searchResult.isEmpty){
-      Navigator.push(
-        context,
-        MaterialPageRoute(builder: (context) => ResultPage(searchResult: searchResult, searchingFor: search,))
-        );
       showDialog(
       context: context,
       builder: (BuildContext context){
@@ -88,16 +84,10 @@ class SubtitleLayerState extends State<SubtitleLayer> {
 
     } else {
 
-      showDialog(
-      context: context,
-      builder: (BuildContext context){
-        return AlertDialog(
-          title: Text('search results for $search'),
-          content: Container(height:500, child: ResultList(input: searchResult)),
-
+      Navigator.push(
+        context,
+        MaterialPageRoute(builder: (context) => ResultPage(searchResult: searchResult, searchingFor: search,))
         );
-      }
-      );
 
     }
 
