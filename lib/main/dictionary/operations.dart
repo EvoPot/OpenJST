@@ -45,23 +45,17 @@ class DictionaryOperations {
   }
 
   Future<List<List<dynamic>>> searchWords(String searchterm) async {
-    final processing =
-        await isar.words.filter().surfaceContains(searchterm).offset(0).limit(20).findAll();
+    final wordContaining = await isar.words.filter().wordContains(searchterm).findAll(); // return words that contain the search term
+
+    final readingContaining = await isar.words.filter().readingContains(searchterm).findAll(); // return readings that contain the search term
+
+    final mergerList = (wordContaining + readingContaining).toSet().toList(); //merge the two lists, delete duplicate words
 
     List<List<dynamic>> result = [];
 
-    for (Word i in processing) {
-      final jsonifiedString = jsonDecode(i.surface!);
-
-      try {
-        if (jsonifiedString[0].contains(searchterm) ||
-            jsonifiedString[1].contains(searchterm)) {
-          result.add(jsonifiedString);
-        }
-      } catch (e) {
-        print(jsonEncode(i.surface!));
-        print(e);
-      }
+    for(Word i in mergerList){
+      final jsonifiedString = jsonDecode(i.surface!); //The surface is JSON stored as string owo
+      result.add(jsonifiedString);
     }
 
     return result;
