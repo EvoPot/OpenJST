@@ -35,9 +35,11 @@ class AddDictionaryButton extends StatelessWidget {
     progressProvider.reset(); // reset the provider
     final tempDir = await getTemporaryDirectory(); // get temporary directory
     showDialog(
+        barrierDismissible: false,
         context: context,
         builder: (BuildContext context) {
           return AlertDialog(
+            
             title: Text("Importing dictionary..."),
             content: Consumer<ProgressProvider>(
               builder: (context, value, child) => Column(
