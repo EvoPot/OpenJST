@@ -43,9 +43,9 @@ class _StructuredcontentState extends State<Structuredcontent> {
                 "content"]); //Maps that have a "type" are likely structured contents.
       } else if (widget.structure["type"] == "text") {
         return HtmlWidget(varToHtml(
-            widget.structure["content"])); //Return the content for the text
+            widget.structure["content"], true)); //Return the content for the text
       } else {
-        return HtmlWidget(varToHtml(widget.structure)); //Fallback
+        return HtmlWidget(varToHtml(widget.structure, true)); //Fallback
       }
     }
     return Text(widget.structure.toString()); //Fallback

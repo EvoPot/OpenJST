@@ -17,12 +17,25 @@ class _ResultPageState extends State<ResultPage> {
 
   late WebViewController controller;
 
+  String listAllResults(List input){
+    String result = '';
+
+    for (var i in input) {
+      result += "<div>${varToHtml(i[5], true)}</div>";
+    }
+
+    print(result + 'is the result there you go');
+
+    return result;
+
+  }
+
   @override
   void initState() {
     // TODO: implement initState
      super.initState();
      print('search: ${widget.searchResult[0][5]}');
-     String htmlContent = varToHtml(widget.searchResult[0][5], true);
+     String htmlContent = listAllResults(widget.searchResult);
      controller = WebViewController()
 
     ..loadHtmlString(htmlContent);
