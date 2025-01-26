@@ -8,8 +8,8 @@ void main() {
   StyleAttribute style = StyleAttribute()..textAlign = 'left';
   OJSTDocument doc = OJSTDocument()
     ..children = [
-      LinkElement(href: 'https://www.youtube.com', lang: 'ja')..style = style
-      
+      LinkElement(href: 'https://www.youtube.com', lang: 'ja')..style = style,
+      ImageElement(path: 'https://www.youtube.com', collapsible: true, collapsed: false)
     ];
 
   print(doc.ExtractDocument());

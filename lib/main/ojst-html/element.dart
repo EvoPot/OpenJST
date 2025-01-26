@@ -1,12 +1,13 @@
+
 import 'styleattribute.dart';
 
 class OJSTElement {
   final String tag;
   List<OJSTElement> children = [];
-  final bool hasChildren;
+  bool hasChildren = true;
   StyleAttribute? style;
 
-  OJSTElement(this.tag, this.hasChildren);
+  OJSTElement(this.tag);
 
   String convertToString() {
 
@@ -99,7 +100,7 @@ class LinkElement extends OJSTElement {
       required this.href,
       required this.lang
     }
-  ) : super('a',false);
+  ) : super('a');
 
   @override
   String getAttributes(){
@@ -117,4 +118,158 @@ class LinkElement extends OJSTElement {
 
 
   }
+}
+
+class LineBreak extends OJSTElement{
+
+  LineBreak() : super('br');
+
+}
+
+class UnstyledElement extends OJSTElement{
+  final String tag; // ruby | rt | rp | table | thead | tbody | tfoot | tr 
+  final String? lang;
+  final bool hasChildren;
+
+  UnstyledElement(
+    {
+      required this.tag,
+      required this.hasChildren,
+      this.lang
+    }
+  ) : super(tag);
+
+
+  @override
+  String getAttributes(){
+
+    String output = '';
+
+    if(lang != null){
+      output += ' lang="$lang"';
+    }
+
+    return output;
+
+  }
+}
+
+class TableElement extends OJSTElement{
+  final String tag; // th | td
+  final String? colSpan;
+  final String? rowSpan;
+  final String? lang;
+
+  TableElement({
+    required this.tag,
+    this.colSpan,
+    this.rowSpan,
+    this.lang
+  }) : super(tag);
+
+  @override
+  String getAttributes(){
+    String output = '';
+
+    if(colSpan != null) output += ' colspan="$colSpan"';
+    if(rowSpan != null) output += ' rowspan="$rowSpan"';
+    if(lang != null) output += ' lang="$lang"';
+
+    return output;
+  }
+  
+}
+
+class StyledElement extends OJSTElement{
+  final String tag; // span | div | ol | ul | li | details | summary
+  final String? title;
+  final bool? open;
+  final String? lang;
+
+  StyledElement(
+    {
+      required this.tag,
+      this.title,
+      this.open,
+      this.lang
+    }
+  ) : super(tag);
+
+  @override
+  String getAttributes(){
+    String output = '';
+
+    if(title != null) output += ' title="$title"';
+    if(open == true) output += ' open';
+    if(lang != null) output += ' lang="$lang"';
+
+    return output;
+  }
+
+  
+}
+
+class ImageElement extends OJSTElement{
+  final String path;
+  final int? width;
+  final int? height;
+  final String? title;
+  final String? alt;
+  final bool? collapsible;
+  final bool? collapsed;
+
+  ImageElement(
+    {
+      required this.path,
+      this.width,
+      this.height,
+      this.title,
+      this.alt,
+      this.collapsible,
+      this.collapsed
+
+    }
+  ) : super('img');
+
+  @override
+  String convertToString() {
+
+    String imageHTML = getImage();
+
+    String isOpen = '';
+    if(collapsed != null && collapsed == false){
+        isOpen = 'open';
+
+    }
+    if(collapsible == true){
+
+      return "<details $isOpen>$imageHTML</details>";
+    }
+    return imageHTML;
+    
+  }
+
+  @override
+  String getAttributes() {
+    String output = '';
+    output += ' src="$path"';
+    if (width != null)output += ' width="${width.toString()}"';
+    if (height != null)output += ' height="${height.toString()}"';
+    if (title != null)output += ' title="$title"';
+    if (alt != null)output += ' alt="$title"';
+
+
+    return output;
+
+
+
+  }
+
+  String getImage(){
+    String style = super.convertStylesToString();
+    String attributes = getAttributes();
+    return "<img$style$attributes>";
+  }
+
+
 }
