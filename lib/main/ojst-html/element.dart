@@ -273,3 +273,15 @@ class ImageElement extends OJSTElement{
 
 
 }
+
+class TextElement extends OJSTElement{
+  final String text;
+  TextElement({required this.text}) : super('wewyhuegwy');
+
+
+  @override
+  String convertToString() {
+
+    return text;
+  }
+}
