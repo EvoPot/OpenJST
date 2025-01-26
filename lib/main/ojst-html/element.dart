@@ -6,10 +6,16 @@ class OJSTElement {
   List<OJSTElement> children = [];
   bool hasChildren = true;
   StyleAttribute? style;
+  List<String> classes = [];
+  String id = '';
 
   OJSTElement(this.tag);
 
   String convertToString() {
+
+    String classes = convertClassesToString();
+    
+    String ids = convertIdToString();
 
     String styles = convertStylesToString();
 
@@ -17,10 +23,27 @@ class OJSTElement {
     
     if (hasChildren) {
       String inside = convertChildrenToString();
-      return "<$tag$attributes$styles>$inside</$tag>";
+      return "<$tag$attributes$styles$classes$ids>$inside</$tag>";
     } else {
-      return "<$tag$attributes$styles>";
+      return "<$tag$attributes$styles$classes$ids>";
     }
+  }
+
+  String convertClassesToString(){
+    String output = '';
+    if(classes.isNotEmpty){
+      output = ' class="${classes.join(' ')}"';
+    }
+    return output;
+  }
+
+  String convertIdToString(){
+    String output = '';
+    if(id.isNotEmpty){
+      output = ' id="$id"';
+
+    }
+    return output;
   }
 
   String convertChildrenToString() {
@@ -267,8 +290,10 @@ class ImageElement extends OJSTElement{
 
   String getImage(){
     String style = super.convertStylesToString();
+    String classes = super.convertClassesToString();
+    String ids= super.convertIdToString();
     String attributes = getAttributes();
-    return "<img$style$attributes>";
+    return "<img$style$attributes$classes$ids>";
   }
 
 
