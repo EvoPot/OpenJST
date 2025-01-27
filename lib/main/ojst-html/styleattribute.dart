@@ -31,4 +31,5 @@ class StyleAttribute {
   String? whiteSpace;
   String? cursor;
   String? listStyleType;
+  String extra = '';
 }

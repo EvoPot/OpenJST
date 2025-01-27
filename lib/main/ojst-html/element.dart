@@ -108,7 +108,7 @@ class OJSTElement {
 
     if(styles.isEmpty) return '';
 
-    return ' style="${styles.join(' ')}"';
+    return ' style="${styles.join(' ')}${style!.extra}"';
 
 
 
