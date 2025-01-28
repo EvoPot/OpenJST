@@ -97,26 +97,20 @@ class AddDictionaryButton extends StatelessWidget {
 
                 if (jsonObject is List && file.name.startsWith("term_bank")) {
 
-
-                  int? prevId;
-                  int? currentWordToEdit;
+                  int? latestid;
+                  List<String> stagingSurfaces = [];
 
                   for(var i in jsonObject){
 
-                    //i[0] is the term, i[1] is the terms reading, i[5] is the list of definitions i[6] is the term id
-
-                    if(i[6] != prevId){
-
-                      currentWordToEdit = await DictionaryOperations().addWord(i[0], newDictionaryId); // the addword function creates a new word thats blank and returns its id.
-                      await DictionaryOperations().addSurfaceToWord(currentWordToEdit, jsonEncode(i)); // this function adds a string to the list of surfaces of a word with a specific id.
-
+                    if(i[6] != latestid && latestid != null){
+                      DictionaryOperations().addWord(i[0], stagingSurfaces, newDictionaryId);
+                      stagingSurfaces = [];
                     } else {
-
-                      await DictionaryOperations().addSurfaceToWord(currentWordToEdit!, jsonEncode(i));
-
+                      stagingSurfaces.add(jsonEncode(i));
                     }
 
-                    prevId = i[6];
+                    latestid = i[6];
+
 
                   }
 

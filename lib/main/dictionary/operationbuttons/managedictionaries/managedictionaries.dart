@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:openjst/main/dictionary/operationbuttons/managedictionaries/managedictionariesprovider.dart';
+import 'package:provider/provider.dart';
 import '../../operations.dart';
 import 'dictionaryoperationbutton.dart';
 import '../../../appstyle/colors.dart';
+
 
 class ManageDictionariesButton extends StatelessWidget {
   final String text;
@@ -11,29 +14,27 @@ class ManageDictionariesButton extends StatelessWidget {
   appColors colors = appColors();
 
   void openManageDictionariesButton(BuildContext context) async {
-    List<int> listOfDicts = await DictionaryOperations().getAllDictionaries();
 
-    
-
-    List<Widget> dictionaryButtonList = List.generate(
-      listOfDicts.length,
-      (int i){
-        return DictionaryOperationButton(dictionaryManaged: listOfDicts[i],);
-      }
-      );
-
-    if(dictionaryButtonList.isEmpty){
-      dictionaryButtonList.add(Text('There are no dictionaries. Try adding one!'));
-    }
+    await DictionaryProvider().updateButtonList;
 
     showDialog(
       context: context,
       builder: (context){
-        return AlertDialog(
-          title: Text('Manage Dictionaries...'),
-          content: Column(children: dictionaryButtonList,mainAxisSize: MainAxisSize.min,),
-          
-          
+        return ChangeNotifierProvider(
+          create: (context) => DictionaryProvider(),
+          child: AlertDialog(
+            title: Text('Manage Dictionaries...'),
+            content: 
+            Consumer<DictionaryProvider>(
+              builder: (context,value,child){
+                return Column(children: value.dictionaryButtonList , mainAxisSize: MainAxisSize.min);
+                
+              }
+              )
+            
+            
+            
+          ),
         );
       }
       );

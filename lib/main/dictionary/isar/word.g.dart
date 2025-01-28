@@ -25,7 +25,7 @@ const WordSchema = CollectionSchema(
     r'surfaces': PropertySchema(
       id: 1,
       name: r'surfaces',
-      type: IsarType.stringList,
+      type: IsarType.string,
     ),
     r'term': PropertySchema(
       id: 2,
@@ -55,12 +55,6 @@ int _wordEstimateSize(
   var bytesCount = offsets.last;
   bytesCount += 3 + object.surfaces.length * 3;
   {
-    for (var i = 0; i < object.surfaces.length; i++) {
-      final value = object.surfaces[i];
-      bytesCount += value.length * 3;
-    }
-  }
-  {
     final value = object.term;
     if (value != null) {
       bytesCount += 3 + value.length * 3;
@@ -76,7 +70,7 @@ void _wordSerialize(
   Map<Type, List<int>> allOffsets,
 ) {
   writer.writeLong(offsets[0], object.dictionaryId);
-  writer.writeStringList(offsets[1], object.surfaces);
+  writer.writeString(offsets[1], object.surfaces);
   writer.writeString(offsets[2], object.term);
 }
 
@@ -89,7 +83,7 @@ Word _wordDeserialize(
   final object = Word();
   object.dictionaryId = reader.readLongOrNull(offsets[0]);
   object.id = id;
-  object.surfaces = reader.readStringList(offsets[1]) ?? [];
+  object.surfaces = reader.readString(offsets[1]);
   object.term = reader.readStringOrNull(offsets[2]);
   return object;
 }
@@ -104,7 +98,7 @@ P _wordDeserializeProp<P>(
     case 0:
       return (reader.readLongOrNull(offset)) as P;
     case 1:
-      return (reader.readStringList(offset) ?? []) as P;
+      return (reader.readString(offset)) as P;
     case 2:
       return (reader.readStringOrNull(offset)) as P;
     default:
@@ -321,7 +315,7 @@ extension WordQueryFilter on QueryBuilder<Word, Word, QFilterCondition> {
     });
   }
 
-  QueryBuilder<Word, Word, QAfterFilterCondition> surfacesElementEqualTo(
+  QueryBuilder<Word, Word, QAfterFilterCondition> surfacesEqualTo(
     String value, {
     bool caseSensitive = true,
   }) {
@@ -334,7 +328,7 @@ extension WordQueryFilter on QueryBuilder<Word, Word, QFilterCondition> {
     });
   }
 
-  QueryBuilder<Word, Word, QAfterFilterCondition> surfacesElementGreaterThan(
+  QueryBuilder<Word, Word, QAfterFilterCondition> surfacesGreaterThan(
     String value, {
     bool include = false,
     bool caseSensitive = true,
@@ -349,7 +343,7 @@ extension WordQueryFilter on QueryBuilder<Word, Word, QFilterCondition> {
     });
   }
 
-  QueryBuilder<Word, Word, QAfterFilterCondition> surfacesElementLessThan(
+  QueryBuilder<Word, Word, QAfterFilterCondition> surfacesLessThan(
     String value, {
     bool include = false,
     bool caseSensitive = true,
@@ -364,7 +358,7 @@ extension WordQueryFilter on QueryBuilder<Word, Word, QFilterCondition> {
     });
   }
 
-  QueryBuilder<Word, Word, QAfterFilterCondition> surfacesElementBetween(
+  QueryBuilder<Word, Word, QAfterFilterCondition> surfacesBetween(
     String lower,
     String upper, {
     bool includeLower = true,
@@ -383,7 +377,7 @@ extension WordQueryFilter on QueryBuilder<Word, Word, QFilterCondition> {
     });
   }
 
-  QueryBuilder<Word, Word, QAfterFilterCondition> surfacesElementStartsWith(
+  QueryBuilder<Word, Word, QAfterFilterCondition> surfacesStartsWith(
     String value, {
     bool caseSensitive = true,
   }) {
@@ -396,7 +390,7 @@ extension WordQueryFilter on QueryBuilder<Word, Word, QFilterCondition> {
     });
   }
 
-  QueryBuilder<Word, Word, QAfterFilterCondition> surfacesElementEndsWith(
+  QueryBuilder<Word, Word, QAfterFilterCondition> surfacesEndsWith(
     String value, {
     bool caseSensitive = true,
   }) {
@@ -409,8 +403,7 @@ extension WordQueryFilter on QueryBuilder<Word, Word, QFilterCondition> {
     });
   }
 
-  QueryBuilder<Word, Word, QAfterFilterCondition> surfacesElementContains(
-      String value,
+  QueryBuilder<Word, Word, QAfterFilterCondition> surfacesContains(String value,
       {bool caseSensitive = true}) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.contains(
@@ -421,7 +414,7 @@ extension WordQueryFilter on QueryBuilder<Word, Word, QFilterCondition> {
     });
   }
 
-  QueryBuilder<Word, Word, QAfterFilterCondition> surfacesElementMatches(
+  QueryBuilder<Word, Word, QAfterFilterCondition> surfacesMatches(
       String pattern,
       {bool caseSensitive = true}) {
     return QueryBuilder.apply(this, (query) {
@@ -433,7 +426,7 @@ extension WordQueryFilter on QueryBuilder<Word, Word, QFilterCondition> {
     });
   }
 
-  QueryBuilder<Word, Word, QAfterFilterCondition> surfacesElementIsEmpty() {
+  QueryBuilder<Word, Word, QAfterFilterCondition> surfacesIsEmpty() {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.equalTo(
         property: r'surfaces',
@@ -442,96 +435,12 @@ extension WordQueryFilter on QueryBuilder<Word, Word, QFilterCondition> {
     });
   }
 
-  QueryBuilder<Word, Word, QAfterFilterCondition> surfacesElementIsNotEmpty() {
+  QueryBuilder<Word, Word, QAfterFilterCondition> surfacesIsNotEmpty() {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.greaterThan(
         property: r'surfaces',
         value: '',
       ));
-    });
-  }
-
-  QueryBuilder<Word, Word, QAfterFilterCondition> surfacesLengthEqualTo(
-      int length) {
-    return QueryBuilder.apply(this, (query) {
-      return query.listLength(
-        r'surfaces',
-        length,
-        true,
-        length,
-        true,
-      );
-    });
-  }
-
-  QueryBuilder<Word, Word, QAfterFilterCondition> surfacesIsEmpty() {
-    return QueryBuilder.apply(this, (query) {
-      return query.listLength(
-        r'surfaces',
-        0,
-        true,
-        0,
-        true,
-      );
-    });
-  }
-
-  QueryBuilder<Word, Word, QAfterFilterCondition> surfacesIsNotEmpty() {
-    return QueryBuilder.apply(this, (query) {
-      return query.listLength(
-        r'surfaces',
-        0,
-        false,
-        999999,
-        true,
-      );
-    });
-  }
-
-  QueryBuilder<Word, Word, QAfterFilterCondition> surfacesLengthLessThan(
-    int length, {
-    bool include = false,
-  }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.listLength(
-        r'surfaces',
-        0,
-        true,
-        length,
-        include,
-      );
-    });
-  }
-
-  QueryBuilder<Word, Word, QAfterFilterCondition> surfacesLengthGreaterThan(
-    int length, {
-    bool include = false,
-  }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.listLength(
-        r'surfaces',
-        length,
-        include,
-        999999,
-        true,
-      );
-    });
-  }
-
-  QueryBuilder<Word, Word, QAfterFilterCondition> surfacesLengthBetween(
-    int lower,
-    int upper, {
-    bool includeLower = true,
-    bool includeUpper = true,
-  }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.listLength(
-        r'surfaces',
-        lower,
-        includeLower,
-        upper,
-        includeUpper,
-      );
     });
   }
 
@@ -697,6 +606,18 @@ extension WordQuerySortBy on QueryBuilder<Word, Word, QSortBy> {
     });
   }
 
+  QueryBuilder<Word, Word, QAfterSortBy> sortBySurfaces() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'surfaces', Sort.asc);
+    });
+  }
+
+  QueryBuilder<Word, Word, QAfterSortBy> sortBySurfacesDesc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'surfaces', Sort.desc);
+    });
+  }
+
   QueryBuilder<Word, Word, QAfterSortBy> sortByTerm() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'term', Sort.asc);
@@ -735,6 +656,18 @@ extension WordQuerySortThenBy on QueryBuilder<Word, Word, QSortThenBy> {
     });
   }
 
+  QueryBuilder<Word, Word, QAfterSortBy> thenBySurfaces() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'surfaces', Sort.asc);
+    });
+  }
+
+  QueryBuilder<Word, Word, QAfterSortBy> thenBySurfacesDesc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'surfaces', Sort.desc);
+    });
+  }
+
   QueryBuilder<Word, Word, QAfterSortBy> thenByTerm() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'term', Sort.asc);
@@ -755,9 +688,10 @@ extension WordQueryWhereDistinct on QueryBuilder<Word, Word, QDistinct> {
     });
   }
 
-  QueryBuilder<Word, Word, QDistinct> distinctBySurfaces() {
+  QueryBuilder<Word, Word, QDistinct> distinctBySurfaces(
+      {bool caseSensitive = true}) {
     return QueryBuilder.apply(this, (query) {
-      return query.addDistinctBy(r'surfaces');
+      return query.addDistinctBy(r'surfaces', caseSensitive: caseSensitive);
     });
   }
 
@@ -782,7 +716,7 @@ extension WordQueryProperty on QueryBuilder<Word, Word, QQueryProperty> {
     });
   }
 
-  QueryBuilder<Word, List<String>, QQueryOperations> surfacesProperty() {
+  QueryBuilder<Word, String, QQueryOperations> surfacesProperty() {
     return QueryBuilder.apply(this, (query) {
       return query.addPropertyName(r'surfaces');
     });

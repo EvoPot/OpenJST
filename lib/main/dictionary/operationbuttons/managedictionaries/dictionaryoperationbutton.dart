@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import '../../operations.dart';
+import 'managedictionariesprovider.dart';
 
 
 class DictionaryOperationButton extends StatelessWidget {
@@ -10,6 +11,8 @@ class DictionaryOperationButton extends StatelessWidget {
 
   void deleteDictionary() async{
     await operations.deleteDictionary(dictionaryManaged);
+    await DictionaryProvider().updateButtonList;
+
 
   }
 

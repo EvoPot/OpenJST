@@ -12,7 +12,7 @@ class Videoplayerpage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: colors.darkGrey,
-      body: OpenVideoPlayerButton(text: 'Open a video file'),
+      body: Center(child: OpenVideoPlayerButton(text: 'Open a video file')),
     );
   }
 }

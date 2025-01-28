@@ -43,7 +43,7 @@ class _ResultPageState extends State<ResultPage> {
       ContentManager manager = ContentManager(ImageRequestManager: getImage, AnchorRequestManager: getAnchor);
       StructuredContentGenerator generator = StructuredContentGenerator(document: document, manager: manager);
 
-      for(String surface in i.surfaces){
+      for(String surface in jsonDecode(i.surfaces)){
 
         List<dynamic> decodedElement = jsonDecode(surface);
 

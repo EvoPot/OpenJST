@@ -45,23 +45,14 @@ class DictionaryOperations {
     return newWord.id;
   }
 
-  Future<void> addSurfaceToWord(int id, String newSurface) async{
 
-    final updatedWord = await isar.words.where().idEqualTo(id).findFirst();
-
-    if(updatedWord != null){
-      updatedWord.surfaces.add(newSurface);
-      await isar.writeTxn(() => isar.words.put(updatedWord));
-    }
-
-  }
-
-  Future<int> addWord(String word, int dictionaryId) async {
+  Future<void> addWord(String word, List<String> surfaces, int dictionaryId) async {
     final newWord = Word()
       ..term = word
+      ..surfaces = jsonEncode(surfaces)
       ..dictionaryId = dictionaryId;
     await isar.writeTxn(() => isar.words.put(newWord));
-    return newWord.id;
+    return;
   }
 
   // read operations
@@ -87,22 +78,7 @@ class DictionaryOperations {
     return wordContaining;
   }
 
-  Future<List<String>> getAllSurfaces() async {
-    // Retrieve all the Word objects from the Isar database
-    final words = await isar.words.where().findAll();
-
-    // Extract the surface property and return a list
-    List<String> surfaces = [];
-
-    for (var word in words) {
-      if (word.surfaces != null) {
-        surfaces.addAll(word.surfaces!); // Ensure `surface` is not null
-      }
-    }
-
-    return surfaces;
-  }
-
+  
   //delete operations
 
   Future<void> deleteDictionaryWords(int dictionaryId) async {

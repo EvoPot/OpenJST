@@ -9,7 +9,7 @@ class Word{
 
   String? term; //The word itself
 
-  List<String> surfaces = []; // The JSON that contains the stuff like the word structure
+  late String surfaces; // The JSON that contains the stuff like the word structure
 
   int? dictionaryId;
 
