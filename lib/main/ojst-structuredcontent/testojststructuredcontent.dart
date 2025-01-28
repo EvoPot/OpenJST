@@ -37,7 +37,19 @@ void main(){
                 {"tag": "div", "content": ["baseline ", {"tag": "span", "style": {"verticalAlign": "bottom"}, "content": "verticalAlign:bottom "}]}
             ]};
   OJSTDocument document = OJSTDocument();
-  ContentManager manager = ContentManager();
+  ContentManager manager = ContentManager(
+    ImageRequestManager: (String a, String b){
+
+      return '';
+
+    }
+    ,
+    AnchorRequestManager: (String a, String b){
+
+      return '';
+      
+    }
+    );
 
   StructuredContentGenerator generator = StructuredContentGenerator(document: document, manager: manager);
 
