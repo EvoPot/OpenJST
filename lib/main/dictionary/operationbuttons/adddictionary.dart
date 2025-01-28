@@ -33,7 +33,7 @@ class AddDictionaryButton extends StatelessWidget {
     final progressProvider =
         Provider.of<ProgressProvider>(context, listen: false); //get provider
     progressProvider.reset(); // reset the provider
-    final tempDir = await getTemporaryDirectory(); // get temporary directory
+    final docDir = await getApplicationDocumentsDirectory(); // get temporary directory
     showDialog(
         barrierDismissible: false,
         context: context,
@@ -54,8 +54,8 @@ class AddDictionaryButton extends StatelessWidget {
             ),
           );
         });
-    String tempDirPath =
-        "${tempDir.path}/${randomString(10)}"; // Ensure the path ends with '/'
+    String dictionarySavePath =
+        "${docDir.path}/dictionaries/dic${randomString(10)}"; // Ensure the path ends with '/'
 
     FilePickerResult? result = await FilePicker.platform
         .pickFiles(type: FileType.custom, allowedExtensions: ['zip']);
@@ -64,7 +64,7 @@ class AddDictionaryButton extends StatelessWidget {
 
     if (result != null) {
       try {
-        final newDir = Directory(tempDirPath);
+        final newDir = Directory(dictionarySavePath);
 
         if (!await newDir.exists()) {
           await newDir.create(recursive: true); //Ensure the path gets generated
@@ -74,8 +74,9 @@ class AddDictionaryButton extends StatelessWidget {
         final archive = ZipDecoder().decodeBytes(bytes);
         progressProvider.changeMax(archive.length);
 
+
         int newDictionaryId =
-            await DictionaryOperations().addDictionary("test dictionary");
+            await DictionaryOperations().addNewDictionary();
 
         for (var file in archive) {
           //extract the files in the zip
@@ -95,11 +96,36 @@ class AddDictionaryButton extends StatelessWidget {
                 print(jsonObject);
 
                 if (jsonObject is List && file.name.startsWith("term_bank")) {
-                  for (var i in jsonObject) {
-                    //i[0] contains the term, i[1] contains the reading, and surface is a JSON stored as string so we encode i and put it there too
-                    await DictionaryOperations()
-                        .addWord(i[0],i[1],jsonEncode(i), newDictionaryId);
+
+
+                  int? prevId;
+                  int? currentWordToEdit;
+
+                  for(var i in jsonObject){
+
+                    //i[0] is the term, i[1] is the terms reading, i[5] is the list of definitions i[6] is the term id
+
+                    if(i[6] != prevId){
+
+                      currentWordToEdit = await DictionaryOperations().addWord(i[0], newDictionaryId); // the addword function creates a new word thats blank and returns its id.
+                      await DictionaryOperations().addSurfaceToWord(currentWordToEdit, jsonEncode(i)); // this function adds a string to the list of surfaces of a word with a specific id.
+
+                    } else {
+
+                      await DictionaryOperations().addSurfaceToWord(currentWordToEdit!, jsonEncode(i));
+
+                    }
+
+                    prevId = i[6];
+
                   }
+
+                  
+
+                }
+
+                if (file.name.startsWith('index')){
+                  await DictionaryOperations().updateDictionary(newDictionaryId, jsonEncode(jsonObject), filePath);
                 }
             }
 
@@ -112,7 +138,6 @@ class AddDictionaryButton extends StatelessWidget {
       } catch (e) {
         print("Error extracting ZIP: $e");
       } finally {
-        print(DictionaryOperations().getAllSurfaces());
         Navigator.of(context)
             .pop(); // Close the alert dialog after everything is complete
       }

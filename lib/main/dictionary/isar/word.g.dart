@@ -22,19 +22,14 @@ const WordSchema = CollectionSchema(
       name: r'dictionaryId',
       type: IsarType.long,
     ),
-    r'reading': PropertySchema(
+    r'surfaces': PropertySchema(
       id: 1,
-      name: r'reading',
-      type: IsarType.string,
+      name: r'surfaces',
+      type: IsarType.stringList,
     ),
-    r'surface': PropertySchema(
+    r'term': PropertySchema(
       id: 2,
-      name: r'surface',
-      type: IsarType.string,
-    ),
-    r'word': PropertySchema(
-      id: 3,
-      name: r'word',
+      name: r'term',
       type: IsarType.string,
     )
   },
@@ -58,20 +53,15 @@ int _wordEstimateSize(
   Map<Type, List<int>> allOffsets,
 ) {
   var bytesCount = offsets.last;
+  bytesCount += 3 + object.surfaces.length * 3;
   {
-    final value = object.reading;
-    if (value != null) {
-      bytesCount += 3 + value.length * 3;
+    for (var i = 0; i < object.surfaces.length; i++) {
+      final value = object.surfaces[i];
+      bytesCount += value.length * 3;
     }
   }
   {
-    final value = object.surface;
-    if (value != null) {
-      bytesCount += 3 + value.length * 3;
-    }
-  }
-  {
-    final value = object.word;
+    final value = object.term;
     if (value != null) {
       bytesCount += 3 + value.length * 3;
     }
@@ -86,9 +76,8 @@ void _wordSerialize(
   Map<Type, List<int>> allOffsets,
 ) {
   writer.writeLong(offsets[0], object.dictionaryId);
-  writer.writeString(offsets[1], object.reading);
-  writer.writeString(offsets[2], object.surface);
-  writer.writeString(offsets[3], object.word);
+  writer.writeStringList(offsets[1], object.surfaces);
+  writer.writeString(offsets[2], object.term);
 }
 
 Word _wordDeserialize(
@@ -100,9 +89,8 @@ Word _wordDeserialize(
   final object = Word();
   object.dictionaryId = reader.readLongOrNull(offsets[0]);
   object.id = id;
-  object.reading = reader.readStringOrNull(offsets[1]);
-  object.surface = reader.readStringOrNull(offsets[2]);
-  object.word = reader.readStringOrNull(offsets[3]);
+  object.surfaces = reader.readStringList(offsets[1]) ?? [];
+  object.term = reader.readStringOrNull(offsets[2]);
   return object;
 }
 
@@ -116,10 +104,8 @@ P _wordDeserializeProp<P>(
     case 0:
       return (reader.readLongOrNull(offset)) as P;
     case 1:
-      return (reader.readStringOrNull(offset)) as P;
+      return (reader.readStringList(offset) ?? []) as P;
     case 2:
-      return (reader.readStringOrNull(offset)) as P;
-    case 3:
       return (reader.readStringOrNull(offset)) as P;
     default:
       throw IsarError('Unknown property with id $propertyId');
@@ -335,75 +321,59 @@ extension WordQueryFilter on QueryBuilder<Word, Word, QFilterCondition> {
     });
   }
 
-  QueryBuilder<Word, Word, QAfterFilterCondition> readingIsNull() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(const FilterCondition.isNull(
-        property: r'reading',
-      ));
-    });
-  }
-
-  QueryBuilder<Word, Word, QAfterFilterCondition> readingIsNotNull() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(const FilterCondition.isNotNull(
-        property: r'reading',
-      ));
-    });
-  }
-
-  QueryBuilder<Word, Word, QAfterFilterCondition> readingEqualTo(
-    String? value, {
+  QueryBuilder<Word, Word, QAfterFilterCondition> surfacesElementEqualTo(
+    String value, {
     bool caseSensitive = true,
   }) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.equalTo(
-        property: r'reading',
+        property: r'surfaces',
         value: value,
         caseSensitive: caseSensitive,
       ));
     });
   }
 
-  QueryBuilder<Word, Word, QAfterFilterCondition> readingGreaterThan(
-    String? value, {
+  QueryBuilder<Word, Word, QAfterFilterCondition> surfacesElementGreaterThan(
+    String value, {
     bool include = false,
     bool caseSensitive = true,
   }) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.greaterThan(
         include: include,
-        property: r'reading',
+        property: r'surfaces',
         value: value,
         caseSensitive: caseSensitive,
       ));
     });
   }
 
-  QueryBuilder<Word, Word, QAfterFilterCondition> readingLessThan(
-    String? value, {
+  QueryBuilder<Word, Word, QAfterFilterCondition> surfacesElementLessThan(
+    String value, {
     bool include = false,
     bool caseSensitive = true,
   }) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.lessThan(
         include: include,
-        property: r'reading',
+        property: r'surfaces',
         value: value,
         caseSensitive: caseSensitive,
       ));
     });
   }
 
-  QueryBuilder<Word, Word, QAfterFilterCondition> readingBetween(
-    String? lower,
-    String? upper, {
+  QueryBuilder<Word, Word, QAfterFilterCondition> surfacesElementBetween(
+    String lower,
+    String upper, {
     bool includeLower = true,
     bool includeUpper = true,
     bool caseSensitive = true,
   }) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.between(
-        property: r'reading',
+        property: r'surfaces',
         lower: lower,
         includeLower: includeLower,
         upper: upper,
@@ -413,102 +383,188 @@ extension WordQueryFilter on QueryBuilder<Word, Word, QFilterCondition> {
     });
   }
 
-  QueryBuilder<Word, Word, QAfterFilterCondition> readingStartsWith(
+  QueryBuilder<Word, Word, QAfterFilterCondition> surfacesElementStartsWith(
     String value, {
     bool caseSensitive = true,
   }) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.startsWith(
-        property: r'reading',
+        property: r'surfaces',
         value: value,
         caseSensitive: caseSensitive,
       ));
     });
   }
 
-  QueryBuilder<Word, Word, QAfterFilterCondition> readingEndsWith(
+  QueryBuilder<Word, Word, QAfterFilterCondition> surfacesElementEndsWith(
     String value, {
     bool caseSensitive = true,
   }) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.endsWith(
-        property: r'reading',
+        property: r'surfaces',
         value: value,
         caseSensitive: caseSensitive,
       ));
     });
   }
 
-  QueryBuilder<Word, Word, QAfterFilterCondition> readingContains(String value,
+  QueryBuilder<Word, Word, QAfterFilterCondition> surfacesElementContains(
+      String value,
       {bool caseSensitive = true}) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.contains(
-        property: r'reading',
+        property: r'surfaces',
         value: value,
         caseSensitive: caseSensitive,
       ));
     });
   }
 
-  QueryBuilder<Word, Word, QAfterFilterCondition> readingMatches(String pattern,
+  QueryBuilder<Word, Word, QAfterFilterCondition> surfacesElementMatches(
+      String pattern,
       {bool caseSensitive = true}) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.matches(
-        property: r'reading',
+        property: r'surfaces',
         wildcard: pattern,
         caseSensitive: caseSensitive,
       ));
     });
   }
 
-  QueryBuilder<Word, Word, QAfterFilterCondition> readingIsEmpty() {
+  QueryBuilder<Word, Word, QAfterFilterCondition> surfacesElementIsEmpty() {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.equalTo(
-        property: r'reading',
+        property: r'surfaces',
         value: '',
       ));
     });
   }
 
-  QueryBuilder<Word, Word, QAfterFilterCondition> readingIsNotEmpty() {
+  QueryBuilder<Word, Word, QAfterFilterCondition> surfacesElementIsNotEmpty() {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.greaterThan(
-        property: r'reading',
+        property: r'surfaces',
         value: '',
       ));
     });
   }
 
-  QueryBuilder<Word, Word, QAfterFilterCondition> surfaceIsNull() {
+  QueryBuilder<Word, Word, QAfterFilterCondition> surfacesLengthEqualTo(
+      int length) {
+    return QueryBuilder.apply(this, (query) {
+      return query.listLength(
+        r'surfaces',
+        length,
+        true,
+        length,
+        true,
+      );
+    });
+  }
+
+  QueryBuilder<Word, Word, QAfterFilterCondition> surfacesIsEmpty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.listLength(
+        r'surfaces',
+        0,
+        true,
+        0,
+        true,
+      );
+    });
+  }
+
+  QueryBuilder<Word, Word, QAfterFilterCondition> surfacesIsNotEmpty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.listLength(
+        r'surfaces',
+        0,
+        false,
+        999999,
+        true,
+      );
+    });
+  }
+
+  QueryBuilder<Word, Word, QAfterFilterCondition> surfacesLengthLessThan(
+    int length, {
+    bool include = false,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.listLength(
+        r'surfaces',
+        0,
+        true,
+        length,
+        include,
+      );
+    });
+  }
+
+  QueryBuilder<Word, Word, QAfterFilterCondition> surfacesLengthGreaterThan(
+    int length, {
+    bool include = false,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.listLength(
+        r'surfaces',
+        length,
+        include,
+        999999,
+        true,
+      );
+    });
+  }
+
+  QueryBuilder<Word, Word, QAfterFilterCondition> surfacesLengthBetween(
+    int lower,
+    int upper, {
+    bool includeLower = true,
+    bool includeUpper = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.listLength(
+        r'surfaces',
+        lower,
+        includeLower,
+        upper,
+        includeUpper,
+      );
+    });
+  }
+
+  QueryBuilder<Word, Word, QAfterFilterCondition> termIsNull() {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(const FilterCondition.isNull(
-        property: r'surface',
+        property: r'term',
       ));
     });
   }
 
-  QueryBuilder<Word, Word, QAfterFilterCondition> surfaceIsNotNull() {
+  QueryBuilder<Word, Word, QAfterFilterCondition> termIsNotNull() {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(const FilterCondition.isNotNull(
-        property: r'surface',
+        property: r'term',
       ));
     });
   }
 
-  QueryBuilder<Word, Word, QAfterFilterCondition> surfaceEqualTo(
+  QueryBuilder<Word, Word, QAfterFilterCondition> termEqualTo(
     String? value, {
     bool caseSensitive = true,
   }) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.equalTo(
-        property: r'surface',
+        property: r'term',
         value: value,
         caseSensitive: caseSensitive,
       ));
     });
   }
 
-  QueryBuilder<Word, Word, QAfterFilterCondition> surfaceGreaterThan(
+  QueryBuilder<Word, Word, QAfterFilterCondition> termGreaterThan(
     String? value, {
     bool include = false,
     bool caseSensitive = true,
@@ -516,14 +572,14 @@ extension WordQueryFilter on QueryBuilder<Word, Word, QFilterCondition> {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.greaterThan(
         include: include,
-        property: r'surface',
+        property: r'term',
         value: value,
         caseSensitive: caseSensitive,
       ));
     });
   }
 
-  QueryBuilder<Word, Word, QAfterFilterCondition> surfaceLessThan(
+  QueryBuilder<Word, Word, QAfterFilterCondition> termLessThan(
     String? value, {
     bool include = false,
     bool caseSensitive = true,
@@ -531,14 +587,14 @@ extension WordQueryFilter on QueryBuilder<Word, Word, QFilterCondition> {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.lessThan(
         include: include,
-        property: r'surface',
+        property: r'term',
         value: value,
         caseSensitive: caseSensitive,
       ));
     });
   }
 
-  QueryBuilder<Word, Word, QAfterFilterCondition> surfaceBetween(
+  QueryBuilder<Word, Word, QAfterFilterCondition> termBetween(
     String? lower,
     String? upper, {
     bool includeLower = true,
@@ -547,7 +603,7 @@ extension WordQueryFilter on QueryBuilder<Word, Word, QFilterCondition> {
   }) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.between(
-        property: r'surface',
+        property: r'term',
         lower: lower,
         includeLower: includeLower,
         upper: upper,
@@ -557,211 +613,67 @@ extension WordQueryFilter on QueryBuilder<Word, Word, QFilterCondition> {
     });
   }
 
-  QueryBuilder<Word, Word, QAfterFilterCondition> surfaceStartsWith(
+  QueryBuilder<Word, Word, QAfterFilterCondition> termStartsWith(
     String value, {
     bool caseSensitive = true,
   }) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.startsWith(
-        property: r'surface',
+        property: r'term',
         value: value,
         caseSensitive: caseSensitive,
       ));
     });
   }
 
-  QueryBuilder<Word, Word, QAfterFilterCondition> surfaceEndsWith(
+  QueryBuilder<Word, Word, QAfterFilterCondition> termEndsWith(
     String value, {
     bool caseSensitive = true,
   }) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.endsWith(
-        property: r'surface',
+        property: r'term',
         value: value,
         caseSensitive: caseSensitive,
       ));
     });
   }
 
-  QueryBuilder<Word, Word, QAfterFilterCondition> surfaceContains(String value,
+  QueryBuilder<Word, Word, QAfterFilterCondition> termContains(String value,
       {bool caseSensitive = true}) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.contains(
-        property: r'surface',
+        property: r'term',
         value: value,
         caseSensitive: caseSensitive,
       ));
     });
   }
 
-  QueryBuilder<Word, Word, QAfterFilterCondition> surfaceMatches(String pattern,
+  QueryBuilder<Word, Word, QAfterFilterCondition> termMatches(String pattern,
       {bool caseSensitive = true}) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.matches(
-        property: r'surface',
+        property: r'term',
         wildcard: pattern,
         caseSensitive: caseSensitive,
       ));
     });
   }
 
-  QueryBuilder<Word, Word, QAfterFilterCondition> surfaceIsEmpty() {
+  QueryBuilder<Word, Word, QAfterFilterCondition> termIsEmpty() {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.equalTo(
-        property: r'surface',
+        property: r'term',
         value: '',
       ));
     });
   }
 
-  QueryBuilder<Word, Word, QAfterFilterCondition> surfaceIsNotEmpty() {
+  QueryBuilder<Word, Word, QAfterFilterCondition> termIsNotEmpty() {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.greaterThan(
-        property: r'surface',
-        value: '',
-      ));
-    });
-  }
-
-  QueryBuilder<Word, Word, QAfterFilterCondition> wordIsNull() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(const FilterCondition.isNull(
-        property: r'word',
-      ));
-    });
-  }
-
-  QueryBuilder<Word, Word, QAfterFilterCondition> wordIsNotNull() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(const FilterCondition.isNotNull(
-        property: r'word',
-      ));
-    });
-  }
-
-  QueryBuilder<Word, Word, QAfterFilterCondition> wordEqualTo(
-    String? value, {
-    bool caseSensitive = true,
-  }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.equalTo(
-        property: r'word',
-        value: value,
-        caseSensitive: caseSensitive,
-      ));
-    });
-  }
-
-  QueryBuilder<Word, Word, QAfterFilterCondition> wordGreaterThan(
-    String? value, {
-    bool include = false,
-    bool caseSensitive = true,
-  }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.greaterThan(
-        include: include,
-        property: r'word',
-        value: value,
-        caseSensitive: caseSensitive,
-      ));
-    });
-  }
-
-  QueryBuilder<Word, Word, QAfterFilterCondition> wordLessThan(
-    String? value, {
-    bool include = false,
-    bool caseSensitive = true,
-  }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.lessThan(
-        include: include,
-        property: r'word',
-        value: value,
-        caseSensitive: caseSensitive,
-      ));
-    });
-  }
-
-  QueryBuilder<Word, Word, QAfterFilterCondition> wordBetween(
-    String? lower,
-    String? upper, {
-    bool includeLower = true,
-    bool includeUpper = true,
-    bool caseSensitive = true,
-  }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.between(
-        property: r'word',
-        lower: lower,
-        includeLower: includeLower,
-        upper: upper,
-        includeUpper: includeUpper,
-        caseSensitive: caseSensitive,
-      ));
-    });
-  }
-
-  QueryBuilder<Word, Word, QAfterFilterCondition> wordStartsWith(
-    String value, {
-    bool caseSensitive = true,
-  }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.startsWith(
-        property: r'word',
-        value: value,
-        caseSensitive: caseSensitive,
-      ));
-    });
-  }
-
-  QueryBuilder<Word, Word, QAfterFilterCondition> wordEndsWith(
-    String value, {
-    bool caseSensitive = true,
-  }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.endsWith(
-        property: r'word',
-        value: value,
-        caseSensitive: caseSensitive,
-      ));
-    });
-  }
-
-  QueryBuilder<Word, Word, QAfterFilterCondition> wordContains(String value,
-      {bool caseSensitive = true}) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.contains(
-        property: r'word',
-        value: value,
-        caseSensitive: caseSensitive,
-      ));
-    });
-  }
-
-  QueryBuilder<Word, Word, QAfterFilterCondition> wordMatches(String pattern,
-      {bool caseSensitive = true}) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.matches(
-        property: r'word',
-        wildcard: pattern,
-        caseSensitive: caseSensitive,
-      ));
-    });
-  }
-
-  QueryBuilder<Word, Word, QAfterFilterCondition> wordIsEmpty() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.equalTo(
-        property: r'word',
-        value: '',
-      ));
-    });
-  }
-
-  QueryBuilder<Word, Word, QAfterFilterCondition> wordIsNotEmpty() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.greaterThan(
-        property: r'word',
+        property: r'term',
         value: '',
       ));
     });
@@ -785,39 +697,15 @@ extension WordQuerySortBy on QueryBuilder<Word, Word, QSortBy> {
     });
   }
 
-  QueryBuilder<Word, Word, QAfterSortBy> sortByReading() {
+  QueryBuilder<Word, Word, QAfterSortBy> sortByTerm() {
     return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(r'reading', Sort.asc);
+      return query.addSortBy(r'term', Sort.asc);
     });
   }
 
-  QueryBuilder<Word, Word, QAfterSortBy> sortByReadingDesc() {
+  QueryBuilder<Word, Word, QAfterSortBy> sortByTermDesc() {
     return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(r'reading', Sort.desc);
-    });
-  }
-
-  QueryBuilder<Word, Word, QAfterSortBy> sortBySurface() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(r'surface', Sort.asc);
-    });
-  }
-
-  QueryBuilder<Word, Word, QAfterSortBy> sortBySurfaceDesc() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(r'surface', Sort.desc);
-    });
-  }
-
-  QueryBuilder<Word, Word, QAfterSortBy> sortByWord() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(r'word', Sort.asc);
-    });
-  }
-
-  QueryBuilder<Word, Word, QAfterSortBy> sortByWordDesc() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(r'word', Sort.desc);
+      return query.addSortBy(r'term', Sort.desc);
     });
   }
 }
@@ -847,39 +735,15 @@ extension WordQuerySortThenBy on QueryBuilder<Word, Word, QSortThenBy> {
     });
   }
 
-  QueryBuilder<Word, Word, QAfterSortBy> thenByReading() {
+  QueryBuilder<Word, Word, QAfterSortBy> thenByTerm() {
     return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(r'reading', Sort.asc);
+      return query.addSortBy(r'term', Sort.asc);
     });
   }
 
-  QueryBuilder<Word, Word, QAfterSortBy> thenByReadingDesc() {
+  QueryBuilder<Word, Word, QAfterSortBy> thenByTermDesc() {
     return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(r'reading', Sort.desc);
-    });
-  }
-
-  QueryBuilder<Word, Word, QAfterSortBy> thenBySurface() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(r'surface', Sort.asc);
-    });
-  }
-
-  QueryBuilder<Word, Word, QAfterSortBy> thenBySurfaceDesc() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(r'surface', Sort.desc);
-    });
-  }
-
-  QueryBuilder<Word, Word, QAfterSortBy> thenByWord() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(r'word', Sort.asc);
-    });
-  }
-
-  QueryBuilder<Word, Word, QAfterSortBy> thenByWordDesc() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(r'word', Sort.desc);
+      return query.addSortBy(r'term', Sort.desc);
     });
   }
 }
@@ -891,24 +755,16 @@ extension WordQueryWhereDistinct on QueryBuilder<Word, Word, QDistinct> {
     });
   }
 
-  QueryBuilder<Word, Word, QDistinct> distinctByReading(
-      {bool caseSensitive = true}) {
+  QueryBuilder<Word, Word, QDistinct> distinctBySurfaces() {
     return QueryBuilder.apply(this, (query) {
-      return query.addDistinctBy(r'reading', caseSensitive: caseSensitive);
+      return query.addDistinctBy(r'surfaces');
     });
   }
 
-  QueryBuilder<Word, Word, QDistinct> distinctBySurface(
+  QueryBuilder<Word, Word, QDistinct> distinctByTerm(
       {bool caseSensitive = true}) {
     return QueryBuilder.apply(this, (query) {
-      return query.addDistinctBy(r'surface', caseSensitive: caseSensitive);
-    });
-  }
-
-  QueryBuilder<Word, Word, QDistinct> distinctByWord(
-      {bool caseSensitive = true}) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addDistinctBy(r'word', caseSensitive: caseSensitive);
+      return query.addDistinctBy(r'term', caseSensitive: caseSensitive);
     });
   }
 }
@@ -926,21 +782,15 @@ extension WordQueryProperty on QueryBuilder<Word, Word, QQueryProperty> {
     });
   }
 
-  QueryBuilder<Word, String?, QQueryOperations> readingProperty() {
+  QueryBuilder<Word, List<String>, QQueryOperations> surfacesProperty() {
     return QueryBuilder.apply(this, (query) {
-      return query.addPropertyName(r'reading');
+      return query.addPropertyName(r'surfaces');
     });
   }
 
-  QueryBuilder<Word, String?, QQueryOperations> surfaceProperty() {
+  QueryBuilder<Word, String?, QQueryOperations> termProperty() {
     return QueryBuilder.apply(this, (query) {
-      return query.addPropertyName(r'surface');
-    });
-  }
-
-  QueryBuilder<Word, String?, QQueryOperations> wordProperty() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addPropertyName(r'word');
+      return query.addPropertyName(r'term');
     });
   }
 }
@@ -956,8 +806,13 @@ const DictSchema = CollectionSchema(
   name: r'Dict',
   id: 987444509729091105,
   properties: {
-    r'surface': PropertySchema(
+    r'path': PropertySchema(
       id: 0,
+      name: r'path',
+      type: IsarType.string,
+    ),
+    r'surface': PropertySchema(
+      id: 1,
       name: r'surface',
       type: IsarType.string,
     )
@@ -983,6 +838,12 @@ int _dictEstimateSize(
 ) {
   var bytesCount = offsets.last;
   {
+    final value = object.path;
+    if (value != null) {
+      bytesCount += 3 + value.length * 3;
+    }
+  }
+  {
     final value = object.surface;
     if (value != null) {
       bytesCount += 3 + value.length * 3;
@@ -997,7 +858,8 @@ void _dictSerialize(
   List<int> offsets,
   Map<Type, List<int>> allOffsets,
 ) {
-  writer.writeString(offsets[0], object.surface);
+  writer.writeString(offsets[0], object.path);
+  writer.writeString(offsets[1], object.surface);
 }
 
 Dict _dictDeserialize(
@@ -1008,7 +870,8 @@ Dict _dictDeserialize(
 ) {
   final object = Dict();
   object.id = id;
-  object.surface = reader.readStringOrNull(offsets[0]);
+  object.path = reader.readStringOrNull(offsets[0]);
+  object.surface = reader.readStringOrNull(offsets[1]);
   return object;
 }
 
@@ -1020,6 +883,8 @@ P _dictDeserializeProp<P>(
 ) {
   switch (propertyId) {
     case 0:
+      return (reader.readStringOrNull(offset)) as P;
+    case 1:
       return (reader.readStringOrNull(offset)) as P;
     default:
       throw IsarError('Unknown property with id $propertyId');
@@ -1162,6 +1027,150 @@ extension DictQueryFilter on QueryBuilder<Dict, Dict, QFilterCondition> {
         includeLower: includeLower,
         upper: upper,
         includeUpper: includeUpper,
+      ));
+    });
+  }
+
+  QueryBuilder<Dict, Dict, QAfterFilterCondition> pathIsNull() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(const FilterCondition.isNull(
+        property: r'path',
+      ));
+    });
+  }
+
+  QueryBuilder<Dict, Dict, QAfterFilterCondition> pathIsNotNull() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(const FilterCondition.isNotNull(
+        property: r'path',
+      ));
+    });
+  }
+
+  QueryBuilder<Dict, Dict, QAfterFilterCondition> pathEqualTo(
+    String? value, {
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.equalTo(
+        property: r'path',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<Dict, Dict, QAfterFilterCondition> pathGreaterThan(
+    String? value, {
+    bool include = false,
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.greaterThan(
+        include: include,
+        property: r'path',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<Dict, Dict, QAfterFilterCondition> pathLessThan(
+    String? value, {
+    bool include = false,
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.lessThan(
+        include: include,
+        property: r'path',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<Dict, Dict, QAfterFilterCondition> pathBetween(
+    String? lower,
+    String? upper, {
+    bool includeLower = true,
+    bool includeUpper = true,
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.between(
+        property: r'path',
+        lower: lower,
+        includeLower: includeLower,
+        upper: upper,
+        includeUpper: includeUpper,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<Dict, Dict, QAfterFilterCondition> pathStartsWith(
+    String value, {
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.startsWith(
+        property: r'path',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<Dict, Dict, QAfterFilterCondition> pathEndsWith(
+    String value, {
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.endsWith(
+        property: r'path',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<Dict, Dict, QAfterFilterCondition> pathContains(String value,
+      {bool caseSensitive = true}) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.contains(
+        property: r'path',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<Dict, Dict, QAfterFilterCondition> pathMatches(String pattern,
+      {bool caseSensitive = true}) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.matches(
+        property: r'path',
+        wildcard: pattern,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<Dict, Dict, QAfterFilterCondition> pathIsEmpty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.equalTo(
+        property: r'path',
+        value: '',
+      ));
+    });
+  }
+
+  QueryBuilder<Dict, Dict, QAfterFilterCondition> pathIsNotEmpty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.greaterThan(
+        property: r'path',
+        value: '',
       ));
     });
   }
@@ -1316,6 +1325,18 @@ extension DictQueryObject on QueryBuilder<Dict, Dict, QFilterCondition> {}
 extension DictQueryLinks on QueryBuilder<Dict, Dict, QFilterCondition> {}
 
 extension DictQuerySortBy on QueryBuilder<Dict, Dict, QSortBy> {
+  QueryBuilder<Dict, Dict, QAfterSortBy> sortByPath() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'path', Sort.asc);
+    });
+  }
+
+  QueryBuilder<Dict, Dict, QAfterSortBy> sortByPathDesc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'path', Sort.desc);
+    });
+  }
+
   QueryBuilder<Dict, Dict, QAfterSortBy> sortBySurface() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'surface', Sort.asc);
@@ -1342,6 +1363,18 @@ extension DictQuerySortThenBy on QueryBuilder<Dict, Dict, QSortThenBy> {
     });
   }
 
+  QueryBuilder<Dict, Dict, QAfterSortBy> thenByPath() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'path', Sort.asc);
+    });
+  }
+
+  QueryBuilder<Dict, Dict, QAfterSortBy> thenByPathDesc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'path', Sort.desc);
+    });
+  }
+
   QueryBuilder<Dict, Dict, QAfterSortBy> thenBySurface() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'surface', Sort.asc);
@@ -1356,6 +1389,13 @@ extension DictQuerySortThenBy on QueryBuilder<Dict, Dict, QSortThenBy> {
 }
 
 extension DictQueryWhereDistinct on QueryBuilder<Dict, Dict, QDistinct> {
+  QueryBuilder<Dict, Dict, QDistinct> distinctByPath(
+      {bool caseSensitive = true}) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addDistinctBy(r'path', caseSensitive: caseSensitive);
+    });
+  }
+
   QueryBuilder<Dict, Dict, QDistinct> distinctBySurface(
       {bool caseSensitive = true}) {
     return QueryBuilder.apply(this, (query) {
@@ -1368,6 +1408,12 @@ extension DictQueryProperty on QueryBuilder<Dict, Dict, QQueryProperty> {
   QueryBuilder<Dict, int, QQueryOperations> idProperty() {
     return QueryBuilder.apply(this, (query) {
       return query.addPropertyName(r'id');
+    });
+  }
+
+  QueryBuilder<Dict, String?, QQueryOperations> pathProperty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addPropertyName(r'path');
     });
   }
 

@@ -17,19 +17,51 @@ class DictionaryOperations {
 
   //write operations
 
-  Future<int> addDictionary(String surface) async {
-    final newDict = Dict()..surface = surface;
+  Future<int> addNewDictionary() async {
+    final newDict = Dict();
     await isar.writeTxn(() => isar.dicts.put(newDict));
     return newDict.id;
   }
 
-  Future<void> addWord(String word,String reading,String surface, int dictionaryId) async {
+  Future<void> updateDictionary(int id, String surface, String path) async{
+    final updatedDict = await isar.dicts.get(id);
+
+    if(updatedDict == null) return;
+
+    updatedDict.path = path;
+    updatedDict.surface = surface;
+
+    await isar.writeTxn(() async {
+      await isar.dicts.put(updatedDict);   
+    });
+
+    return;
+    
+  }
+
+  Future<int> initializeNewWord(String term) async{
+    final newWord = Word()..term = term;
+    await isar.writeTxn(() => isar.words.put(newWord));
+    return newWord.id;
+  }
+
+  Future<void> addSurfaceToWord(int id, String newSurface) async{
+
+    final updatedWord = await isar.words.where().idEqualTo(id).findFirst();
+
+    if(updatedWord != null){
+      updatedWord.surfaces.add(newSurface);
+      await isar.writeTxn(() => isar.words.put(updatedWord));
+    }
+
+  }
+
+  Future<int> addWord(String word, int dictionaryId) async {
     final newWord = Word()
-      ..word = word
-      ..reading = reading
-      ..surface = surface
+      ..term = word
       ..dictionaryId = dictionaryId;
     await isar.writeTxn(() => isar.words.put(newWord));
+    return newWord.id;
   }
 
   // read operations
@@ -74,8 +106,8 @@ class DictionaryOperations {
     List<String> surfaces = [];
 
     for (var word in words) {
-      if (word.surface != null) {
-        surfaces.add(word.surface!); // Ensure `surface` is not null
+      if (word.surfaces != null) {
+        surfaces.addAll(word.surfaces!); // Ensure `surface` is not null
       }
     }
 
