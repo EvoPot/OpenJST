@@ -78,24 +78,13 @@ class DictionaryOperations {
     return result;
   }
 
-  Future<dynamic> searchWords(String searchterm) async {
+  Future<List<Word>> searchWords(String searchterm) async {
     final stopwatch = Stopwatch()..start();
     print('stopwatch has been started');
-    final wordContaining = await isar.words.filter().wordStartsWith(searchterm).or().readingStartsWith(searchterm).surfaceProperty().findAll(); // return words that contain the search term
+    final wordContaining = await isar.words.filter().termStartsWith(searchterm).findAll(); // return words that contain the search term
     print('isar filtering operation for $searchterm done in ${stopwatch.elapsedMilliseconds}ms');
-    final result = await Future.wait(
-      wordContaining.map((word) async{
-        if(word != null){
-          return jsonDecode(word);
-        }
-        return [];
-      })
-    );
-    print('json decoding operation for $searchterm done in ${stopwatch.elapsedMilliseconds}ms');
     stopwatch.stop();
-    print('search operation for $searchterm done in ${stopwatch.elapsedMilliseconds}ms');
-
-    return result;
+    return wordContaining;
   }
 
   Future<List<String>> getAllSurfaces() async {

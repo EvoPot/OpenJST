@@ -3,6 +3,7 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_vlc_player/flutter_vlc_player.dart';
+import 'package:openjst/main/dictionary/isar/word.dart';
 import 'package:openjst/subtitletest.dart';
 import 'package:flutter_subtitle/flutter_subtitle.dart';
 import '../../../text/selectablesubtitle.dart';
@@ -68,7 +69,7 @@ class SubtitleLayerState extends State<SubtitleLayer> {
   Future<void> ShowMeanings(String search, BuildContext context) async {
     print("searching for $search");
 
-    List<dynamic> searchResult = await DictionaryOperations().searchWords(search);
+    List<Word> searchResult = await DictionaryOperations().searchWords(search);
 
     if(searchResult.isEmpty){
       showDialog(
