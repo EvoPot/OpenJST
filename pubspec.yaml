@@ -49,9 +49,6 @@ dependencies:
   archive: ^4.0.2
   provider: ^6.1.2
   flutter_vlc_player: ^7.4.2
-  media_kit: ^1.1.11
-  media_kit_video: ^1.2.5
-  media_kit_libs_video: ^1.0.5
   subtitle: ^0.1.0-beta.3
   ffmpeg_kit_flutter: ^6.0.3
   flutter_subtitle: ^0.0.5

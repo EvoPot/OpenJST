@@ -23,6 +23,7 @@ import 'dictionary/operations.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await DictionaryOperations.initialize();
+  await DictionaryOperations().resetAll;
   runApp(ChangeNotifierProvider(
     //TODO: get rid of not ideal provider
       create: (_) => ProgressProvider(), child: HomePage()));
