@@ -15,13 +15,14 @@ class ManageDictionariesButton extends StatelessWidget {
 
   void openManageDictionariesButton(BuildContext context) async {
 
-    await DictionaryProvider().updateButtonList;
+    final provider = Provider.of<DictionaryProvider>(context,listen: false);
+    await provider.updateButtonList();
 
     showDialog(
       context: context,
       builder: (context){
         return ChangeNotifierProvider(
-          create: (context) => DictionaryProvider(),
+          create: (context) => DictionaryProvider()..updateButtonList(),
           child: AlertDialog(
             title: Text('Manage Dictionaries...'),
             content: 

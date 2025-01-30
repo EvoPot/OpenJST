@@ -8,7 +8,7 @@ import '../../isar/word.dart';
 class DictionaryProvider extends ChangeNotifier{
   List<Widget> dictionaryButtonList = [Text('there are no dictionaries. try adding one!')];
 
-  void updateButtonList() async{
+  Future<void> updateButtonList() async{
     List<Dict> dictionaryResultList = await DictionaryOperations().getAllDictionaries();
     dictionaryButtonList = List.generate(
       dictionaryResultList.length,

@@ -1,18 +1,21 @@
 import 'package:flutter/material.dart';
 import 'package:openjst/main/dictionary/isar/word.dart';
+import 'package:provider/provider.dart';
 import '../../operations.dart';
 import 'managedictionariesprovider.dart';
 
 
 class DictionaryOperationButton extends StatelessWidget {
+
   final Dict dictionaryManaged;
   DictionaryOperationButton({super.key, required this.dictionaryManaged});
 
   DictionaryOperations operations = DictionaryOperations();
 
-  void deleteDictionary() async{
+  void deleteDictionary(BuildContext context) async{
     await operations.deleteDictionary(dictionaryManaged.id);
-    await DictionaryProvider().updateButtonList;
+    final provider = Provider.of<DictionaryProvider>(context, listen: false);
+    await provider.updateButtonList();
 
 
   }
@@ -27,7 +30,7 @@ class DictionaryOperationButton extends StatelessWidget {
         child: Row(
           children: [
             Text("Dictionary!!"),
-            IconButton(onPressed: deleteDictionary, icon: Icon(Icons.delete))
+            IconButton(onPressed: ()=> deleteDictionary(context), icon: Icon(Icons.delete))
           ],
         )
       ),
