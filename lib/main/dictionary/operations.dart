@@ -56,15 +56,8 @@ class DictionaryOperations {
   }
 
   // read operations
-  Future<List<int>> getAllDictionaries() async{
-    final processing = await isar.dicts.where().findAll();
-
-    List<int> result = [];
-
-    for(Dict i in processing){
-      result.add(i.id);
-
-    }
+  Future<List<Dict>> getAllDictionaries() async{
+    final result = await isar.dicts.where().findAll();
 
     return result;
   }

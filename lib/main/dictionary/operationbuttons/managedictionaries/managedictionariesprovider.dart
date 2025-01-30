@@ -9,11 +9,11 @@ class DictionaryProvider extends ChangeNotifier{
   List<Widget> dictionaryButtonList = [Text('there are no dictionaries. try adding one!')];
 
   void updateButtonList() async{
-    List<int> dictionaryIdList = await DictionaryOperations().getAllDictionaries();
+    List<Dict> dictionaryResultList = await DictionaryOperations().getAllDictionaries();
     dictionaryButtonList = List.generate(
-      dictionaryIdList.length,
+      dictionaryResultList.length,
       (int index){
-        return DictionaryOperationButton(dictionaryManaged: dictionaryIdList[index]);
+        return DictionaryOperationButton(dictionaryManaged: dictionaryResultList[index]);
       }
       );
     if(dictionaryButtonList.isEmpty) dictionaryButtonList.add(Text('there are no dictionaries. try adding one!'));
