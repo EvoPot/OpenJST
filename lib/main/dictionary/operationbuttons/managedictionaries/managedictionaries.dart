@@ -1,42 +1,59 @@
 import 'package:flutter/material.dart';
-import 'package:openjst/main/dictionary/operationbuttons/managedictionaries/managedictionariesprovider.dart';
-import 'package:provider/provider.dart';
+import 'package:openjst/main/dictionary/isar/word.dart';
 import '../../operations.dart';
 import 'dictionaryoperationbutton.dart';
 import '../../../appstyle/colors.dart';
 
 
-class ManageDictionariesButton extends StatelessWidget {
+class ManageDictionariesButton extends StatefulWidget {
   final String text;
   ManageDictionariesButton({super.key, required this.text});
 
+  @override
+  State<ManageDictionariesButton> createState() => _ManageDictionariesButtonState();
+}
+
+class _ManageDictionariesButtonState extends State<ManageDictionariesButton> {
   DictionaryOperations operations = DictionaryOperations();
+  List<Widget> dictionaryButtonList = [];
+
   appColors colors = appColors();
 
-  void openManageDictionariesButton(BuildContext context) async {
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    UpdateButtonList();
+  }
 
-    final provider = Provider.of<DictionaryProvider>(context,listen: false);
-    await provider.updateButtonList();
+  void UpdateButtonList() async{
+    List<Dict> result = await operations.getAllDictionaries();
+    dictionaryButtonList = List.generate(
+      result.length, 
+      (int index){
+        return DictionaryOperationButton(dictionaryManaged: result[index], onButtonPress: deleteDictionary);
+      }
+      );
+
+  }
+
+
+  void deleteDictionary(int dictionary) async{
+    await operations.deleteDictionary(dictionary);
+    UpdateButtonList();
+  }
+
+  void openManageDictionariesButton(BuildContext context) async {
 
     showDialog(
       context: context,
       builder: (context){
-        return ChangeNotifierProvider(
-          create: (context) => DictionaryProvider()..updateButtonList(),
-          child: AlertDialog(
+        return AlertDialog(
             title: Text('Manage Dictionaries...'),
             content: 
-            Consumer<DictionaryProvider>(
-              builder: (context,value,child){
-                return Column(children: value.dictionaryButtonList , mainAxisSize: MainAxisSize.min);
-                
-              }
-              )
-            
-            
-            
-          ),
-        );
+                Column(children: dictionaryButtonList , mainAxisSize: MainAxisSize.min)        
+          );
+        
       }
       );
 
@@ -46,7 +63,7 @@ class ManageDictionariesButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return TextButton(
         onPressed: () => openManageDictionariesButton(context),
-        child: Text(text),
+        child: Text(widget.text),
         style: ButtonStyle(
           backgroundColor: WidgetStateProperty.all(colors.slightlyDarkerGrey),
           foregroundColor: WidgetStateProperty.all(colors.mainAccentColor),
