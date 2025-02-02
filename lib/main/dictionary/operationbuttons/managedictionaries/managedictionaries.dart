@@ -28,6 +28,7 @@ class _ManageDictionariesButtonState extends State<ManageDictionariesButton> {
 
   void UpdateButtonList() async{
     List<Dict> result = await operations.getAllDictionaries();
+    print('result length is ${result.length}');
     dictionaryButtonList = List.generate(
       result.length, 
       (int index){
@@ -38,18 +39,19 @@ class _ManageDictionariesButtonState extends State<ManageDictionariesButton> {
   }
 
 
-  void deleteDictionary(int dictionary) async{
+  Future<void> deleteDictionary(int dictionary) async{
     await operations.deleteDictionary(dictionary);
     UpdateButtonList();
   }
 
   void openManageDictionariesButton(BuildContext context) async {
+    UpdateButtonList();
 
     showDialog(
       context: context,
       builder: (context){
         return AlertDialog(
-            title: Text('Manage Dictionaries...'),
+            title: const Text('Manage Dictionaries...'),
             content: 
                 Column(children: dictionaryButtonList , mainAxisSize: MainAxisSize.min)        
           );
@@ -63,10 +65,12 @@ class _ManageDictionariesButtonState extends State<ManageDictionariesButton> {
   Widget build(BuildContext context) {
     return TextButton(
         onPressed: () => openManageDictionariesButton(context),
-        child: Text(widget.text),
         style: ButtonStyle(
           backgroundColor: WidgetStateProperty.all(colors.slightlyDarkerGrey),
           foregroundColor: WidgetStateProperty.all(colors.mainAccentColor),
-        ));
+        ),
+				
+        child: Text(widget.text),
+				);
   }
 }
